@@ -16,10 +16,10 @@ public class CodecoolShop {
 //        get("/hello", (req, res) -> "Hello World");
 //
 //        // Always add generic routes to the end
-//        get("/", ProductController::renderProducts, new ThymeleafTemplateEngine());
+//        get("/", ProductListController::renderProducts, new ThymeleafTemplateEngine());
 //        // Equivalent with above
 //        get("/index", (Request req, Response res) -> {
-//           return new ThymeleafTemplateEngine().render( ProductController.renderProducts(req, res) );
+//           return new ThymeleafTemplateEngine().render( ProductListController.renderProducts(req, res) );
 //        });
 //
 //        // Add this line to your project to enable the debug screen

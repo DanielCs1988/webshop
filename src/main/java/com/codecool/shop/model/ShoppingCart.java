@@ -1,5 +1,6 @@
 package com.codecool.shop.model;
 
+import java.util.Collections;
 import java.util.Map;
 
 public class ShoppingCart {
@@ -24,10 +25,14 @@ public class ShoppingCart {
     }
 
     public Map<Integer, Integer> getOrders() {
-        return orders;
+        return Collections.unmodifiableMap(orders);
     }
 
     public void setOrders(Map<Integer, Integer> orders) {
         this.orders = orders;
+    }
+
+    public void addOrder(int productId, int productNumber) {
+        this.orders.put(productId, productNumber);
     }
 }

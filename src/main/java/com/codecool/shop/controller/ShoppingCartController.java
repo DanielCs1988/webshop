@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
-@WebServlet(urlPatterns = {"/shopping-cart"})
+@WebServlet(urlPatterns = {"/checkout"})
 public class ShoppingCartController extends HttpServlet {
 
     private Gson gson = new Gson();
@@ -29,6 +29,34 @@ public class ShoppingCartController extends HttpServlet {
         ShoppingCart order = gson.fromJson(shoppingCart, ShoppingCart.class);
         shoppingCartDataStore.add(order);
         System.out.println(order);
+        System.out.println(order.getUser().getBillingAddress().getAddress());
     }
 
 }
+
+/* Mock for the correct shopping cart JSON:
+{
+    'user': {
+        'name': 'Jack',
+        'email': 'asd',
+        'phone': '21223312',
+        'billingAddress': {
+            'zipcode': '1234',
+            'country': 'Hungary',
+            'city': 'Budapest',
+            'address': 'KEKVILLE'
+        },
+        'shippingAddress': {
+            'zipcode': '1234',
+            'country': 'Hungary',
+            'city': 'Budapest',
+            'address': 'KEKVILLE'
+        }
+    },
+    'paymentId': 123456789,
+    'orders': {
+        1: 1,
+        2: 2,
+        3: 3
+    }
+}*/

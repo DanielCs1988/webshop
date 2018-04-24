@@ -6,15 +6,16 @@ public class Product extends BaseModel {
 
     private float defaultPrice;
     private Currency defaultCurrency;
-    private ProductCategory productCategory;
-    private Supplier supplier;
+    private int productCategoryId;
+    private int supplierId;
 
 
-    public Product(String name, float defaultPrice, String currencyString, String description, ProductCategory productCategory, Supplier supplier) {
+    public Product(String name, float defaultPrice, String currencyString, String description, int productCategoryId, int supplierId) {
         super(name, description);
         this.setPrice(defaultPrice, currencyString);
-        this.setSupplier(supplier);
-        this.setProductCategory(productCategory);
+        this.productCategoryId = productCategoryId;
+        this.supplierId = supplierId;
+
     }
 
     public float getDefaultPrice() {
@@ -42,35 +43,35 @@ public class Product extends BaseModel {
         this.defaultCurrency = Currency.getInstance(currency);
     }
 
-    public ProductCategory getProductCategory() {
-        return productCategory;
+    public int getProductCategory() {
+        return productCategoryId;
     }
 
-    public void setProductCategory(ProductCategory productCategory) {
-        this.productCategory = productCategory;
+    public void setProductCategory(int productCategoryId) {
+        this.productCategoryId = productCategoryId;
     }
 
-    public Supplier getSupplier() {
-        return supplier;
+    public int getSupplier() {
+        return supplierId;
     }
 
-    public void setSupplier(Supplier supplier) {
-        this.supplier = supplier;
+    public void setSupplier(int supplierId) {
+        this.supplierId = supplierId;
     }
 
     @Override
     public String toString() {
-        return String.format("id: %1$d, " +
+        return String.format("id: %2$d, " +
                         "name: %2$s, " +
                         "defaultPrice: %3$f, " +
                         "defaultCurrency: %4$s, " +
                         "productCategory: %5$s, " +
-                        "supplier: %6$s",
+                        "supplierId: %2$d",
                 this.id,
                 this.name,
                 this.defaultPrice,
                 this.defaultCurrency.toString(),
-                this.productCategory.getName(),
-                this.supplier.getName());
+                this.productCategoryId,
+                this.supplierId);
     }
 }

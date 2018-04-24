@@ -35,4 +35,12 @@ public class ShoppingCart {
     public void addOrder(int productId, int productNumber) {
         this.orders.put(productId, productNumber);
     }
+
+    @Override
+    public String toString() {
+        return "ShoppingCart{" +
+                "userId=" + userId +
+                ", orders=" + orders +
+                '}';
+    }
 }

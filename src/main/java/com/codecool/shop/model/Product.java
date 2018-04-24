@@ -5,6 +5,7 @@ import java.util.Currency;
 public class Product extends BaseModel {
 
     private float defaultPrice;
+    private String currencyString;
     private Currency defaultCurrency;
     private int productCategoryId;
     private int supplierId;
@@ -15,7 +16,6 @@ public class Product extends BaseModel {
         this.setPrice(defaultPrice, currencyString);
         this.productCategoryId = productCategoryId;
         this.supplierId = supplierId;
-
     }
 
     public float getDefaultPrice() {
@@ -27,6 +27,9 @@ public class Product extends BaseModel {
     }
 
     public Currency getDefaultCurrency() {
+        if (defaultCurrency == null) {
+            defaultCurrency = Currency.getInstance(currencyString);
+        }
         return defaultCurrency;
     }
 
@@ -61,16 +64,16 @@ public class Product extends BaseModel {
 
     @Override
     public String toString() {
-        return String.format("id: %2$d, " +
+        return String.format("id: %1$d, " +
                         "name: %2$s, " +
                         "defaultPrice: %3$f, " +
                         "defaultCurrency: %4$s, " +
                         "productCategory: %5$s, " +
-                        "supplierId: %2$d",
+                        "supplierId: %6$d",
                 this.id,
                 this.name,
                 this.defaultPrice,
-                this.defaultCurrency.toString(),
+                this.getDefaultCurrency(),
                 this.productCategoryId,
                 this.supplierId);
     }

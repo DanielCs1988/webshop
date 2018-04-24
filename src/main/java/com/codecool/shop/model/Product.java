@@ -4,18 +4,27 @@ import java.util.Currency;
 
 public class Product extends BaseModel {
 
+    private static int idSequence;
     private float defaultPrice;
     private String currencyString;
     private Currency defaultCurrency;
+    private String imageName;
     private int productCategoryId;
     private int supplierId;
 
 
-    public Product(String name, float defaultPrice, String currencyString, String description, int productCategoryId, int supplierId) {
+    public Product(String name, float defaultPrice, String currencyString, String description, String imageName,
+                   int productCategoryId, int supplierId) {
         super(name, description);
+        this.imageName = imageName;
         this.setPrice(defaultPrice, currencyString);
         this.productCategoryId = productCategoryId;
         this.supplierId = supplierId;
+    }
+
+    @Override
+    protected int generateId() {
+        return idSequence ++;
     }
 
     public float getDefaultPrice() {
@@ -62,6 +71,14 @@ public class Product extends BaseModel {
         this.supplierId = supplierId;
     }
 
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
+    }
+
     @Override
     public String toString() {
         return String.format("id: %1$d, " +
@@ -70,7 +87,7 @@ public class Product extends BaseModel {
                         "defaultCurrency: %4$s, " +
                         "productCategory: %5$s, " +
                         "supplierId: %6$d",
-                this.id,
+                this.getId(),
                 this.name,
                 this.defaultPrice,
                 this.getDefaultCurrency(),

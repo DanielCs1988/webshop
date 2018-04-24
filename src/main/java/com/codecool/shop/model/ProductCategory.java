@@ -1,14 +1,18 @@
 package com.codecool.shop.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ProductCategory extends BaseModel {
+
+    private static int idSequence;
     private String department;
 
     public ProductCategory(String name, String department, String description) {
         super(name, description);
         this.department = department;
+    }
+
+    @Override
+    protected int generateId() {
+        return idSequence ++;
     }
 
     public String getDepartment() {
@@ -25,7 +29,7 @@ public class ProductCategory extends BaseModel {
                         "name: %2$s, " +
                         "department: %3$s, " +
                         "description: %4$s",
-                this.id,
+                this.getId(),
                 this.name,
                 this.department,
                 this.description);

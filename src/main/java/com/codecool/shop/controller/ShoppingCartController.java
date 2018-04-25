@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
-@WebServlet(urlPatterns = {"/checkout"})
+@WebServlet(urlPatterns = {"/webshop/checkout"})
 public class ShoppingCartController extends HttpServlet {
 
     private Gson gson = new Gson();

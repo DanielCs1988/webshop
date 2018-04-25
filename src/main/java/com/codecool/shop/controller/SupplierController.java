@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-@WebServlet(urlPatterns = {"/supplier"})
+@WebServlet(urlPatterns = {"/webshop/supplier"})
 public class SupplierController extends HttpServlet {
 
     private Gson gson = new Gson();

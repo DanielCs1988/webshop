@@ -11,7 +11,7 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet("/product")
+@WebServlet("/webshop/product")
 public class ProductController extends HttpServlet {
 
     private Gson gson = new Gson();

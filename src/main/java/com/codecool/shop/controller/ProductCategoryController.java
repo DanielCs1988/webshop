@@ -10,7 +10,7 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet(urlPatterns = {"/product-category"})
+@WebServlet(urlPatterns = {"/webshop/product-category"})
 public class ProductCategoryController extends HttpServlet {
 
     private Gson gson = new Gson();

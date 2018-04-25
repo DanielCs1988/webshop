@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-@WebServlet(urlPatterns = {"/product-list"})
+@WebServlet(urlPatterns = {"/webshop/product-list"})
 public class ProductListController extends HttpServlet {
 
     private Gson gson = new Gson();

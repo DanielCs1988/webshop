@@ -4,6 +4,7 @@ import com.codecool.shop.dao.ShoppingCartDao;
 import com.codecool.shop.dao.SupplierDao;
 import com.codecool.shop.dao.implementation.ShoppingCartDaoMem;
 import com.codecool.shop.dao.implementation.SupplierDaoMem;
+import com.codecool.shop.model.Address;
 import com.codecool.shop.model.Product;
 import com.codecool.shop.model.ShoppingCart;
 import com.codecool.shop.model.Supplier;
@@ -37,33 +38,17 @@ public class ShoppingCartController extends HttpServlet {
         order.setId();
         shoppingCartDataStore.add(order);
         System.out.println(order);
+        sendMail(order);
+    }
+
+    private void sendMail(ShoppingCart order) {
+        String subject = "Information about order number " + order.getId();
+        Address address = order.getUser().getShippingAddress();
+        StringBuilder content = new StringBuilder("<h2>Dear " + order.getUser().getName() + "!</h2>" +
+                "<p>Thank you for the purchase, Team Codeberg has received your order.</p>" +
+                "<p>The items will arrive at the following address: </p>" +
+                "" + address.getZipcode() + " " + address.getCountry() + ", " + address.getAddress() + "" +
+                "<p>Payment identifier: " + order.getPaymentId());
     }
 
 }
-
-/* Mock for the correct shopping cart JSON:
-{
-    'user': {
-        'name': 'Jack',
-        'email': 'asd',
-        'phone': '21223312',
-        'billingAddress': {
-            'zipcode': '1234',
-            'country': 'Hungary',
-            'city': 'Budapest',
-            'address': 'KEKVILLE'
-        },
-        'shippingAddress': {
-            'zipcode': '1234',
-            'country': 'Hungary',
-            'city': 'Budapest',
-            'address': 'KEKVILLE'
-        }
-    },
-    'paymentId': 123456789,
-    'orders': {
-        1: 1,
-        2: 2,
-        3: 3
-    }
-}*/

@@ -1,5 +1,6 @@
 package com.codecool.shop.controller;
 
+import com.codecool.shop.MailSender;
 import com.codecool.shop.dao.ShoppingCartDao;
 import com.codecool.shop.dao.SupplierDao;
 import com.codecool.shop.dao.implementation.ShoppingCartDaoMem;
@@ -44,11 +45,14 @@ public class ShoppingCartController extends HttpServlet {
     private void sendMail(ShoppingCart order) {
         String subject = "Information about order number " + order.getId();
         Address address = order.getUser().getShippingAddress();
-        StringBuilder content = new StringBuilder("<h2>Dear " + order.getUser().getName() + "!</h2>" +
-                "<p>Thank you for the purchase, Team Codeberg has received your order.</p>" +
+        String content = "<h2>Dear " + order.getUser().getName() + "!</h2>" +
+                "<p>Thank you for the purchase, we have received your order.</p>" +
                 "<p>The items will arrive at the following address: </p>" +
                 "" + address.getZipcode() + " " + address.getCountry() + ", " + address.getAddress() + "" +
-                "<p>Payment identifier: " + order.getPaymentId());
+                "<p>Payment identifier: " + order.getPaymentId() + "</p>" +
+                "<br><p>We hope you have a nice day!<br>Team Codeberg</p>";
+        MailSender mailSender = new MailSender(order.getUser().getEmail(), subject, content);
+        mailSender.start();
     }
 
 }

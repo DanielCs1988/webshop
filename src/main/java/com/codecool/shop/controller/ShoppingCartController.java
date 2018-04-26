@@ -14,6 +14,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
 
 
@@ -25,11 +26,17 @@ public class ShoppingCartController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ShoppingCartDao shoppingCartDataStore = ShoppingCartDaoMem.getInstance();
-        String shoppingCart = req.getParameter("shopping-cart");
-        ShoppingCart order = gson.fromJson(shoppingCart, ShoppingCart.class);
+        StringBuilder rawData = new StringBuilder();
+        BufferedReader reader = req.getReader();
+        String input;
+
+        while ((input = reader.readLine()) != null) {
+            rawData.append(input);
+        }
+        ShoppingCart order = gson.fromJson(rawData.toString(), ShoppingCart.class);
+        order.setId();
         shoppingCartDataStore.add(order);
         System.out.println(order);
-        System.out.println(order.getUser().getBillingAddress().getAddress());
     }
 
 }

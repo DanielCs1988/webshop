@@ -45,6 +45,12 @@ public class ShoppingCart {
         return id;
     }
 
+    public void setId() {
+        if (id == 0) {
+            id = idSequence++;
+        }
+    }
+
     public long getPaymentId() {
         return paymentId;
     }
@@ -56,8 +62,10 @@ public class ShoppingCart {
     @Override
     public String toString() {
         return "ShoppingCart{" +
-                "user=" + user +
+                "id=" + id +
+                ", user=" + user +
                 ", orders=" + orders +
+                ", paymentId=" + paymentId +
                 '}';
     }
 }

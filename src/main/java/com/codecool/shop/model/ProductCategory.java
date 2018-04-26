@@ -1,9 +1,12 @@
 package com.codecool.shop.model;
 
+import java.util.ArrayList;
+
 public class ProductCategory extends BaseModel {
 
     private static int idSequence;
     private String department;
+    private ArrayList<Integer> suppliers;
 
     public ProductCategory(String name, String department, String description) {
         super(name, description);
@@ -22,6 +25,8 @@ public class ProductCategory extends BaseModel {
     public void setDepartment(String department) {
         this.department = department;
     }
+
+    public void setSuppliers(Integer supplierId) { this.suppliers.add(supplierId); }
 
     public String toString() {
         return String.format(

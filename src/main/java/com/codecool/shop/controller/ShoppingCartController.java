@@ -2,22 +2,16 @@ package com.codecool.shop.controller;
 
 import com.codecool.shop.MailSender;
 import com.codecool.shop.dao.ShoppingCartDao;
-import com.codecool.shop.dao.SupplierDao;
 import com.codecool.shop.dao.implementation.ShoppingCartDaoMem;
-import com.codecool.shop.dao.implementation.SupplierDaoMem;
 import com.codecool.shop.model.Address;
-import com.codecool.shop.model.Product;
 import com.codecool.shop.model.ShoppingCart;
-import com.codecool.shop.model.Supplier;
 import com.google.gson.Gson;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
-import java.io.IOException;
+import javax.servlet.http.*;
+import java.io.*;
+import java.time.LocalDateTime;
 
 
 @WebServlet(urlPatterns = {"/webshop/checkout"})
@@ -39,6 +33,7 @@ public class ShoppingCartController extends HttpServlet {
         order.setId();
         shoppingCartDataStore.add(order);
         System.out.println(order);
+        logOrder(rawData.toString(), order.getId());
         sendMail(order);
     }
 
@@ -55,4 +50,16 @@ public class ShoppingCartController extends HttpServlet {
         mailSender.start();
     }
 
+    private void logOrder(String order, int id) {
+        LocalDateTime currentDT = LocalDateTime.now();
+        String filename = "./orders/order" + id + "_" + currentDT.getYear() + currentDT.getMonthValue()
+                + currentDT.getDayOfMonth() + ".json";
+        try {
+            PrintWriter writer = new PrintWriter(filename, "UTF-8");
+            writer.println(order);
+            writer.close();
+        } catch (FileNotFoundException | UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -1,5 +1,8 @@
 package com.codecool.shop.model;
 
+import com.codecool.shop.dao.ProductCategoryDao;
+import com.codecool.shop.dao.implementation.ProductCategoryDaoMem;
+
 import java.util.Currency;
 
 public class Product extends BaseModel {
@@ -20,6 +23,8 @@ public class Product extends BaseModel {
         this.setPrice(defaultPrice, currencyString);
         this.productCategoryId = productCategoryId;
         this.supplierId = supplierId;
+        this.addSupplierId();
+
     }
 
     @Override
@@ -77,6 +82,10 @@ public class Product extends BaseModel {
 
     public void setImageName(String imageName) {
         this.imageName = imageName;
+    }
+
+    private void addSupplierId() {
+        ProductCategoryDaoMem.getInstance().find(this.productCategoryId).setSuppliers(this.supplierId);
     }
 
     @Override

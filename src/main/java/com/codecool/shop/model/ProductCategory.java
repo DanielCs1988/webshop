@@ -1,12 +1,13 @@
 package com.codecool.shop.model;
 
-import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class ProductCategory extends BaseModel {
 
     private static int idSequence;
     private String department;
-    private ArrayList<Integer> suppliers;
+    private Set<Integer> suppliers = new LinkedHashSet<>();
 
     public ProductCategory(String name, String department, String description) {
         super(name, description);

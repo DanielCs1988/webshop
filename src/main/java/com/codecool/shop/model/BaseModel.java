@@ -3,28 +3,26 @@ package com.codecool.shop.model;
 
 import java.lang.reflect.Field;
 
-public class BaseModel {
+public abstract class BaseModel {
 
-    protected int id;
+    private int id;
     protected String name;
     protected String description;
 
-    public BaseModel(String name) {
-        this.name = name;
+    public BaseModel() {
+        this.id = generateId();
     }
 
     public BaseModel(String name, String description) {
+        this();
         this.name = name;
         this.description = description;
     }
 
+    protected abstract int generateId();
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -52,10 +50,10 @@ public class BaseModel {
             try {
                 value = field.get(this);
                 if (value != null) {
-                    sb.append(field.getName() + ":" + value + ",");
+                    sb.append(field.getName()).append(":").append(value).append(",");
                 }
             } catch (IllegalAccessException e) {
-
+                e.printStackTrace();
             }
         }
         return sb.toString();

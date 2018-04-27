@@ -1,20 +1,35 @@
 package com.codecool.shop.model;
 
+import com.codecool.shop.dao.ProductCategoryDao;
+import com.codecool.shop.dao.implementation.ProductCategoryDaoMem;
+
 import java.util.Currency;
 
 public class Product extends BaseModel {
 
+    private static int idSequence;
     private float defaultPrice;
+    private String currencyString;
     private Currency defaultCurrency;
-    private ProductCategory productCategory;
-    private Supplier supplier;
+    private String imageName;
+    private int productCategoryId;
+    private int supplierId;
 
 
-    public Product(String name, float defaultPrice, String currencyString, String description, ProductCategory productCategory, Supplier supplier) {
+    public Product(String name, float defaultPrice, String currencyString, String description, String imageName,
+                   int productCategoryId, int supplierId) {
         super(name, description);
+        this.imageName = imageName;
         this.setPrice(defaultPrice, currencyString);
-        this.setSupplier(supplier);
-        this.setProductCategory(productCategory);
+        this.productCategoryId = productCategoryId;
+        this.supplierId = supplierId;
+        this.addSupplierId();
+
+    }
+
+    @Override
+    protected int generateId() {
+        return idSequence ++;
     }
 
     public float getDefaultPrice() {
@@ -26,6 +41,9 @@ public class Product extends BaseModel {
     }
 
     public Currency getDefaultCurrency() {
+        if (defaultCurrency == null) {
+            defaultCurrency = Currency.getInstance(currencyString);
+        }
         return defaultCurrency;
     }
 
@@ -42,22 +60,32 @@ public class Product extends BaseModel {
         this.defaultCurrency = Currency.getInstance(currency);
     }
 
-    public ProductCategory getProductCategory() {
-        return productCategory;
+    public int getProductCategory() {
+        return productCategoryId;
     }
 
-    public void setProductCategory(ProductCategory productCategory) {
-        this.productCategory = productCategory;
-        this.productCategory.addProduct(this);
+    public void setProductCategory(int productCategoryId) {
+        this.productCategoryId = productCategoryId;
     }
 
-    public Supplier getSupplier() {
-        return supplier;
+    public int getSupplier() {
+        return supplierId;
     }
 
-    public void setSupplier(Supplier supplier) {
-        this.supplier = supplier;
-        this.supplier.addProduct(this);
+    public void setSupplier(int supplierId) {
+        this.supplierId = supplierId;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
+    }
+
+    private void addSupplierId() {
+        ProductCategoryDaoMem.getInstance().find(this.productCategoryId).setSuppliers(this.supplierId);
     }
 
     @Override
@@ -67,12 +95,12 @@ public class Product extends BaseModel {
                         "defaultPrice: %3$f, " +
                         "defaultCurrency: %4$s, " +
                         "productCategory: %5$s, " +
-                        "supplier: %6$s",
-                this.id,
+                        "supplierId: %6$d",
+                this.getId(),
                 this.name,
                 this.defaultPrice,
-                this.defaultCurrency.toString(),
-                this.productCategory.getName(),
-                this.supplier.getName());
+                this.getDefaultCurrency(),
+                this.productCategoryId,
+                this.supplierId);
     }
 }

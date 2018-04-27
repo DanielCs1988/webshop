@@ -1,16 +1,22 @@
 package com.codecool.shop.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class ProductCategory extends BaseModel {
+
+    private static int idSequence;
     private String department;
-    private List<Product> products;
+    private Set<Integer> suppliers = new LinkedHashSet<>();
 
     public ProductCategory(String name, String department, String description) {
-        super(name);
+        super(name, description);
         this.department = department;
-        this.products = new ArrayList<>();
+    }
+
+    @Override
+    protected int generateId() {
+        return idSequence ++;
     }
 
     public String getDepartment() {
@@ -21,17 +27,7 @@ public class ProductCategory extends BaseModel {
         this.department = department;
     }
 
-    public void setProducts(ArrayList<Product> products) {
-        this.products = products;
-    }
-
-    public List<Product> getProducts() {
-        return this.products;
-    }
-
-    public void addProduct(Product product) {
-        this.products.add(product);
-    }
+    public void setSuppliers(Integer supplierId) { this.suppliers.add(supplierId); }
 
     public String toString() {
         return String.format(
@@ -39,7 +35,7 @@ public class ProductCategory extends BaseModel {
                         "name: %2$s, " +
                         "department: %3$s, " +
                         "description: %4$s",
-                this.id,
+                this.getId(),
                 this.name,
                 this.department,
                 this.description);

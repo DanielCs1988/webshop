@@ -39,7 +39,7 @@ public class ShoppingCartDaoMem implements ShoppingCartDao {
     }
 
     @Override
-    public List<ShoppingCart> getAll() {
+    public List<ShoppingCart> getAll(int userId) {
         return null;
     }
 

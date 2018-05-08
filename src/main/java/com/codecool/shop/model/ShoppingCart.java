@@ -3,7 +3,7 @@ package com.codecool.shop.model;
 import java.util.Collections;
 import java.util.Map;
 
-public class ShoppingCart {
+public class  ShoppingCart {
 
     private int id;
     private int userId;

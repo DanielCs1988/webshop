@@ -5,8 +5,6 @@ import com.codecool.shop.dao.SupplierDao;
 import com.codecool.shop.dao.utils.QueryProcessor;
 import com.codecool.shop.model.Supplier;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 public class SupplierDaoPSQL implements SupplierDao {
@@ -35,16 +33,5 @@ public class SupplierDaoPSQL implements SupplierDao {
     @Override
     public List getAll() {
         return QueryProcessor.FetchAll("SELECT * FROM suppliers;", assembler);
-    }
-
-    private final class SupplierAssembler implements ModelAssembler<Supplier> {
-        @Override
-        public Supplier assemble(ResultSet resultSet) throws SQLException {
-            return new Supplier(
-                    resultSet.getInt("id"),
-                    resultSet.getString("name"),
-                    resultSet.getString("description")
-            );
-        }
     }
 }

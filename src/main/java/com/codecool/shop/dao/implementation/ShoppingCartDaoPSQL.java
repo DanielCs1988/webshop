@@ -2,6 +2,7 @@ package com.codecool.shop.dao.implementation;
 
 import com.codecool.shop.dao.ModelAssembler;
 import com.codecool.shop.dao.ShoppingCartDao;
+import com.codecool.shop.dao.utils.QueryProcessor;
 import com.codecool.shop.model.ShoppingCart;
 
 import java.util.*;
@@ -30,16 +31,24 @@ public class ShoppingCartDaoPSQL implements ShoppingCartDao {
 
     @Override
     public ShoppingCart find(int id) {
-        return null;
+
+        return QueryProcessor.FetchOne("SELECT o.id, user_id, payment_id, ARRAY_AGG(po.product_id), ARRAY_AGG(po.quantities)" +
+                "FROM orders AS o JOIN product_orders AS po" +
+                "WHERE o.id = ?" +
+                "GROUP BY o.id,user_id,payment_id;",assembler,String.valueOf(id));
     }
 
     @Override
     public void remove(int id) {
-
+        QueryProcessor.ExecuteUpdate("DELETE FROM orders WHERE id = ?;",String.valueOf(id));
     }
 
     @Override
-    public List<ShoppingCart> getAll() {
-        return null;
+    public List<ShoppingCart> getAll(int userId) {
+
+        return QueryProcessor.FetchAll("SELECT o.id, user_id, payment_id, ARRAY_AGG(po.product_id), ARRAY_AGG(po.quantities)" +
+                "FROM orders AS o JOIN product_orders AS po" +
+                "WHERE user_id = ?" +
+                "GROUP BY o.id, user_id, payment_id;",assembler,String.valueOf(userId));
     }
 }

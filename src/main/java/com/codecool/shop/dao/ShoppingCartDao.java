@@ -9,6 +9,6 @@ public interface ShoppingCartDao {
     void add(ShoppingCart shoppingCart);
     ShoppingCart find(int id);
     void remove(int id);
-    List<ShoppingCart> getAll();
+    List<ShoppingCart> getAll(int userId);
 
 }

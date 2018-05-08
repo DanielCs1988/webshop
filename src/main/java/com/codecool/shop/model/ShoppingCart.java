@@ -5,28 +5,29 @@ import java.util.Map;
 
 public class ShoppingCart {
 
-    private static int idSequence;
     private int id;
-    private User user;
+    private int userId;
     private Map<Integer, Integer> orders;
     private long paymentId;
 
-    public ShoppingCart(User user, Map<Integer, Integer> orders, long paymentId) {
-        this.user = user;
+    public ShoppingCart(Map<Integer, Integer> orders, long paymentId) {
         this.orders = orders;
         this.paymentId = paymentId;
-        this.id = idSequence++;
+    }
+
+    public ShoppingCart(Map<Integer, Integer> orders, long paymentId, int userId) {
+        this.userId = userId;
+        this.orders = orders;
+        this.paymentId = paymentId;
+    }
+
+    public ShoppingCart(Map<Integer, Integer> orders, int id, long paymentId) {
+        this.id = id;
+        this.orders = orders;
+        this.paymentId = paymentId;
     }
 
     public ShoppingCart() {
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public Map<Integer, Integer> getOrders() {
@@ -41,14 +42,16 @@ public class ShoppingCart {
         this.orders.put(productId, productNumber);
     }
 
+    public int getUserId() {
+        return userId;
+    }
+
     public int getId() {
         return id;
     }
 
     public void setId() {
-        if (id == 0) {
-            id = idSequence++;
-        }
+
     }
 
     public long getPaymentId() {
@@ -63,7 +66,6 @@ public class ShoppingCart {
     public String toString() {
         return "ShoppingCart{" +
                 "id=" + id +
-                ", user=" + user +
                 ", orders=" + orders +
                 ", paymentId=" + paymentId +
                 '}';

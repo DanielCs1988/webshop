@@ -26,13 +26,13 @@ public class ShoppingCartDaoPSQL implements ShoppingCartDao {
 
     @Override
     public void add(ShoppingCart shoppingCart) {
-        QueryProcessor.ExecuteUpdate(
-                "INSERT INTO orders (user_id, payment_id) VALUES (?, ?);",
+        int orderId = QueryProcessor.FetchOne(
+                "INSERT INTO orders (user_id, payment_id) VALUES (?, ?) RETURNING id;",
+                rs -> rs.getInt("id"),
                 String.valueOf(shoppingCart.getUserId()),
                 String.valueOf(shoppingCart.getPaymentId())
         );
-        int orderId = QueryProcessor.FetchOne("SELECT * FROM orders WHERE payment_id = ?", assembler,
-                String.valueOf(shoppingCart.getPaymentId())).getId();
+        if (shoppingCart.getOrders().isEmpty()) return;
 
         StringBuilder sb = new StringBuilder("INSERT INTO product_orders (order_id, product_id, quantity) VALUES ");
         Map<Integer, Integer> orders = shoppingCart.getOrders();

@@ -5,6 +5,7 @@ import com.codecool.shop.dao.ProductDao;
 import com.codecool.shop.model.Product;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 public class ProductDaoPSQL implements ProductDao {
@@ -47,9 +48,16 @@ public class ProductDaoPSQL implements ProductDao {
     private final class ProductAssembler implements ModelAssembler<Product> {
 
         @Override
-        public Product assemble(ResultSet resultSet) {
+        public Product assemble(ResultSet rs) throws SQLException {
             return new Product(
-                    resultSet.
+                    rs.getInt("id"),
+                    rs.getString("name"),
+                    rs.getString("description"),
+                    rs.getFloat("price"),
+                    rs.getString("currency"),
+                    rs.getString("image"),
+                    rs.getInt("product_category_id"),
+                    rs.getInt("supplier_id")
             );
         }
     }

@@ -26,7 +26,7 @@ public class Product extends BaseModel {
 
     }
 
-    public Product(int id, String name, float defaultPrice, String currencyString, String description, String imageName,
+    public Product(int id, String name, String description, float defaultPrice, String currencyString, String imageName,
                    int productCategoryId, int supplierId) {
         super(id, name, description);
         this.imageName = imageName;

@@ -26,7 +26,24 @@ public class ShoppingCartDaoPSQL implements ShoppingCartDao {
 
     @Override
     public void add(ShoppingCart shoppingCart) {
+        QueryProcessor.ExecuteUpdate(
+                "INSERT INTO orders (user_id, payment_id) VALUES (?, ?);",
+                String.valueOf(shoppingCart.getUserId()),
+                String.valueOf(shoppingCart.getPaymentId())
+        );
+        int orderId = QueryProcessor.FetchOne("SELECT * FROM orders WHERE payment_id = ?", assembler,
+                String.valueOf(shoppingCart.getPaymentId())).getId();
 
+        StringBuilder sb = new StringBuilder("INSERT INTO product_orders (order_id, product_id, quantity) VALUES ");
+        Map<Integer, Integer> orders = shoppingCart.getOrders();
+        for (Integer productId : orders.keySet()) {
+            sb.append("(")
+                    .append(orderId).append(", ")
+                    .append(productId).append(", ")
+                    .append(orders.get(productId)) .append("), ");
+        }
+        sb.delete(-1, -3).append(";");
+        QueryProcessor.ExecuteUpdate(sb.toString());
     }
 
     @Override

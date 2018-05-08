@@ -2,16 +2,12 @@ package com.codecool.shop.model;
 
 public class Supplier extends BaseModel {
 
-    private static int idSequence;
-
     public Supplier(String name, String description) {
-        this.name = name;
-        this.description = description;
+        super(name, description);
     }
 
-    @Override
-    protected int generateId() {
-        return idSequence ++;
+    public Supplier(int id, String name, String description) {
+        super(id, name, description);
     }
 
     public String toString() {

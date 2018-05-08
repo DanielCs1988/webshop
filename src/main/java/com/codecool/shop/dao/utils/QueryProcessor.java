@@ -5,7 +5,7 @@ import java.sql.*;
 
 public class QueryProcessor {
 
-    public void ExecuteUpdate(String queryLine, String... params) {
+    public static void ExecuteUpdate(String queryLine, String... params) {
         try (Connection connection = DatabaseConnectionHandler.getConnection();
              PreparedStatement statement = connection.prepareStatement(queryLine)
         ){
@@ -21,7 +21,7 @@ public class QueryProcessor {
         }
     }
 
-    public <T> T ExecuteQuery(String queryLine, ModelAssembler<T> assembler, String... params) {
+    public static <T> T ExecuteQuery(String queryLine, ModelAssembler<T> assembler, String... params) {
         try (Connection connection = DatabaseConnectionHandler.getConnection();
              PreparedStatement statement = connection.prepareStatement(queryLine)) {
 

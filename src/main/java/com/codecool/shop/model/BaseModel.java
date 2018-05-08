@@ -5,21 +5,20 @@ import java.lang.reflect.Field;
 
 public abstract class BaseModel {
 
-    private int id;
+    protected int id;
     protected String name;
     protected String description;
 
-    public BaseModel() {
-        this.id = generateId();
-    }
-
     public BaseModel(String name, String description) {
-        this();
         this.name = name;
         this.description = description;
     }
 
-    protected abstract int generateId();
+    public BaseModel(int id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+    }
 
     public int getId() {
         return id;

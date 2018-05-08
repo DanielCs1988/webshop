@@ -5,7 +5,6 @@ import java.util.Set;
 
 public class ProductCategory extends BaseModel {
 
-    private static int idSequence;
     private String department;
     private Set<Integer> suppliers = new LinkedHashSet<>();
 
@@ -14,9 +13,9 @@ public class ProductCategory extends BaseModel {
         this.department = department;
     }
 
-    @Override
-    protected int generateId() {
-        return idSequence ++;
+    public ProductCategory(int id, String name, String department, String description) {
+        super(id, name, description);
+        this.department = department;
     }
 
     public String getDepartment() {

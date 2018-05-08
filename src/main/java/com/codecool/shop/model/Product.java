@@ -7,7 +7,6 @@ import java.util.Currency;
 
 public class Product extends BaseModel {
 
-    private static int idSequence;
     private float defaultPrice;
     private String currencyString;
     private Currency defaultCurrency;
@@ -27,9 +26,14 @@ public class Product extends BaseModel {
 
     }
 
-    @Override
-    protected int generateId() {
-        return idSequence ++;
+    public Product(int id, String name, float defaultPrice, String currencyString, String description, String imageName,
+                   int productCategoryId, int supplierId) {
+        super(id, name, description);
+        this.imageName = imageName;
+        this.setPrice(defaultPrice, currencyString);
+        this.productCategoryId = productCategoryId;
+        this.supplierId = supplierId;
+        this.addSupplierId();
     }
 
     public float getDefaultPrice() {

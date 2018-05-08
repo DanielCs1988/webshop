@@ -59,11 +59,17 @@ public class ProductDaoPSQL implements ProductDao {
 
     @Override
     public List<Product> getByProductCategory(int productCategoryId) {
-        return null;
+        return QueryProcessor.FetchAll(
+                "SELECT * FROM products WHERE product_category_id = ?;",
+                assembler, String.valueOf(productCategoryId)
+        );
     }
 
     @Override
     public List<Product> getBySupplierAndCategory(int supplierId, int productCategoryId) {
-        return null;
+        return QueryProcessor.FetchAll(
+                "SELECT * FROM products WHERE product_category_id = ? AND supplier_id = ?;",
+                assembler, String.valueOf(productCategoryId), String.valueOf(supplierId)
+        );
     }
 }

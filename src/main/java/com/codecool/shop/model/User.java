@@ -2,14 +2,16 @@ package com.codecool.shop.model;
 
 public class User {
 
-    private String name;
     private int id;
+    private String name;
     private String password;
     private String email;
     private String phone;
     private Address billingAddress;
     private Address shippingAddress;
-    public User(String name, String email, String phone, Address billingAddress, Address shippingAddress, String password) {
+
+    public User(String name, String email, String password, String phone, Address billingAddress,
+                Address shippingAddress) {
         this.name = name;
         this.password = password;
         this.email = email;
@@ -18,7 +20,8 @@ public class User {
         this.shippingAddress = shippingAddress;
     }
 
-    public User(String name, String email, String phone, Address billingAddress, Address shippingAddress, String password, int id) {
+    public User(int id, String name, String email, String password, String phone, Address billingAddress,
+                Address shippingAddress) {
         this.name = name;
         this.id = id;
         this.password = password;

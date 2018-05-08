@@ -7,24 +7,20 @@ public class ShoppingCart {
 
     private int id;
     private int userId;
-    private Map<Integer, Integer> orders;
     private long paymentId;
+    private Map<Integer, Integer> orders;
 
-    public ShoppingCart(Map<Integer, Integer> orders, long paymentId) {
-        this.orders = orders;
-        this.paymentId = paymentId;
-    }
-
-    public ShoppingCart(Map<Integer, Integer> orders, long paymentId, int userId) {
+    public ShoppingCart(int userId, long paymentId, Map<Integer, Integer> orders) {
         this.userId = userId;
-        this.orders = orders;
         this.paymentId = paymentId;
+        this.orders = orders;
     }
 
-    public ShoppingCart(Map<Integer, Integer> orders, int id, long paymentId) {
+    public ShoppingCart(int id, int userId, long paymentId, Map<Integer, Integer> orders) {
         this.id = id;
-        this.orders = orders;
+        this.userId = userId;
         this.paymentId = paymentId;
+        this.orders = orders;
     }
 
     public ShoppingCart() {

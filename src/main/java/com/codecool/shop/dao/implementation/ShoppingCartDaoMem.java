@@ -28,4 +28,19 @@ public class ShoppingCartDaoMem implements ShoppingCartDao {
         data.add(shoppingCart);
     }
 
+    @Override
+    public ShoppingCart find(int id) {
+        return null;
+    }
+
+    @Override
+    public void remove(int id) {
+
+    }
+
+    @Override
+    public List<ShoppingCart> getAll() {
+        return null;
+    }
+
 }

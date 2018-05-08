@@ -2,8 +2,8 @@ package com.codecool.shop.dao.implementation;
 
 import com.codecool.shop.dao.ModelAssembler;
 import com.codecool.shop.dao.UserDao;
+import com.codecool.shop.dao.utils.QueryProcessor;
 import com.codecool.shop.model.Address;
-import com.codecool.shop.model.Product;
 import com.codecool.shop.model.User;
 
 public class UserDaoPSQL implements UserDao {
@@ -29,17 +29,27 @@ public class UserDaoPSQL implements UserDao {
     );
 
     @Override
-    public void add(Product product) {
-
+    public void add(User user) {
+        Address billing = user.getBillingAddress();
+        Address shipping = user.getShippingAddress();
+        QueryProcessor.ExecuteUpdate(
+                "INSERT INTO users (name, email, password, phone, " +
+                                             "billing_zipcode, billing_country, billing_city, billing_address, " +
+                                             "shipping_zipcode, shipping_country, shipping_city, shipping_address)" +
+                           "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                user.getName(), user.getEmail(), user.getPassword(), user.getPhone(),
+                billing.getZipcode(), billing.getCountry(), billing.getCity(), billing.getAddress(),
+                shipping.getZipcode(), shipping.getCountry(), shipping.getCity(), shipping.getAddress()
+        );
     }
 
     @Override
-    public Product find(int id) {
-        return null;
+    public User find(int id) {
+        return QueryProcessor.FetchOne("SELECT * FROM users WHERE id = ?;", assembler, String.valueOf(id));
     }
 
     @Override
     public void remove(int id) {
-
+        QueryProcessor.ExecuteUpdate("DELETE FROM users WHERE id = ?;", String.valueOf(id));
     }
 }

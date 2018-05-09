@@ -61,8 +61,6 @@ class ProductCategoryDaoPSQLTest {
                 new ProductCategory(2, "Laptop", "Electronics", "Portable powerhouses for sale."),
                 new ProductCategory(3, "Chocolate", "Snacks", "Tasty sweets to lighten the mood.")
         ));
-        System.out.println(productCategories);
-        System.out.println(dao.getAll());
         assertEquals(productCategories.toString(), dao.getAll().toString());
     }
 }

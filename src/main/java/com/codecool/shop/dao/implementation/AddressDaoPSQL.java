@@ -8,36 +8,41 @@ import com.codecool.shop.model.Address;
 public class AddressDaoPSQL implements AddressDao {
 
     private ModelAssembler<Address> assembler = rs -> new Address(
+            rs.getInt("id"),
+            rs.getInt("user_id"),
             rs.getString("zip_code"),
             rs.getString("country"),
             rs.getString("city"),
-            rs.getString("street"),
-            rs.getInt("user_id"),
-            rs.getInt("id")
+            rs.getString("street")
     );
 
     @Override
-    public void add(Address address) {
-        QueryProcessor.ExecuteUpdate("INSERT INTO addresses (zip_code, country, city, street, user_id)" +
-                                                "VALUES (?,?,?,?,?)",
-                                                address.getZipcode(),address.getCountry(),address.getCity(),
-                                                address.getStreet(),String.valueOf(address.getUserId()));
+    public int add(Address address) {
+        return QueryProcessor.FetchOne(
+                "INSERT INTO addresses (zip_code, country, city, street, user_id)" +
+                        " VALUES (?, ?, ?, ?, ?::INTEGER) RETURNING id;",
+                rs -> rs.getInt("id"),
+                address.getZipcode(),address.getCountry(),address.getCity(),
+                address.getStreet(),String.valueOf(address.getUserId())
+        );
     }
 
     @Override
     public Address find(int id) {
-        return QueryProcessor.FetchOne("SELECT * FROM addresses WHERE id = ?;", assembler, String.valueOf(id));
+        return QueryProcessor.FetchOne("SELECT * FROM addresses WHERE id = ?::INTEGER;", assembler, String.valueOf(id));
     }
 
     @Override
     public void remove(int id) {
-        QueryProcessor.ExecuteUpdate("DELETE FROM addresses WHERE id = ?;",String.valueOf(id));
+        QueryProcessor.ExecuteUpdate("DELETE FROM addresses WHERE id = ?::INTEGER;",String.valueOf(id));
     }
 
     @Override
     public void modify(Address address) {
-        QueryProcessor.ExecuteUpdate("UPDATE addresses SET zip_code = ?, country = ?, city = ? street = ?" +
-                "                               WHERE user_id = ?;",address.getZipcode(),address.getCountry(),
-                                                address.getCity(),address.getStreet(),String.valueOf(address.getUserId()));
+        QueryProcessor.ExecuteUpdate(
+                "UPDATE addresses SET zip_code = ?, country = ?, city = ?, street = ? WHERE id = ?::INTEGER;",
+                address.getZipcode(), address.getCountry(), address.getCity(),
+                address.getStreet(), String.valueOf(address.getId())
+        );
     }
 }

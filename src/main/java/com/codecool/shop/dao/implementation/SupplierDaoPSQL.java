@@ -9,25 +9,29 @@ import java.util.List;
 
 public class SupplierDaoPSQL implements SupplierDao {
     private ModelAssembler<Supplier> assembler = rs -> new Supplier(
+            rs.getInt("id"),
             rs.getString("name"),
             rs.getString("description")
     );
 
 
     @Override
-    public void add(Supplier supplier) {
-        QueryProcessor.ExecuteUpdate("INSERT INTO suppliers (name, description) VALUES (?,?);",
-                supplier.getName(), supplier.getDescription());
+    public int add(Supplier supplier) {
+        return QueryProcessor.FetchOne(
+                "INSERT INTO suppliers (name, description) VALUES (?,?) RETURNING id;",
+                rs -> rs.getInt("id"),
+                supplier.getName(), supplier.getDescription()
+        );
     }
 
     @Override
     public Supplier find(int id) {
-        return QueryProcessor.FetchOne("SELECT * FROM suppliers WHERE id = ?;",assembler,String.valueOf(id));
+        return QueryProcessor.FetchOne("SELECT * FROM suppliers WHERE id = ?::INTEGER;",assembler,String.valueOf(id));
     }
 
     @Override
     public void remove(int id) {
-        QueryProcessor.ExecuteUpdate("DELETE FROM suppliers WHERE id = ?;", String.valueOf(id));
+        QueryProcessor.ExecuteUpdate("DELETE FROM suppliers WHERE id = ?::INTEGER;", String.valueOf(id));
     }
 
     @Override

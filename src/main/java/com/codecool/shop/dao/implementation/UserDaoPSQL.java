@@ -38,8 +38,8 @@ public class UserDaoPSQL implements UserDao {
                                              "shipping_zipcode, shipping_country, shipping_city, shipping_address)" +
                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 user.getName(), user.getEmail(), user.getPassword(), user.getPhone(),
-                billing.getZipcode(), billing.getCountry(), billing.getCity(), billing.getAddress(),
-                shipping.getZipcode(), shipping.getCountry(), shipping.getCity(), shipping.getAddress()
+                billing.getZipcode(), billing.getCountry(), billing.getCity(), billing.getStreet(),
+                shipping.getZipcode(), shipping.getCountry(), shipping.getCity(), shipping.getStreet()
         );
     }
 

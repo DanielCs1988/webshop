@@ -5,16 +5,44 @@ public class Address {
     private String zipcode;
     private String country;
     private String city;
-    private String address;
+    private String street;
+    private int userId;
+    private int id;
 
-    public Address(String zipcode, String country, String city, String address) {
+    public Address(String zipcode, String country, String city, String street, int id) {
         this.zipcode = zipcode;
         this.country = country;
         this.city = city;
-        this.address = address;
+        this.street = street;
+        this.id = id;
+    }
+
+    public Address(String zipcode, String country, String city, String street, int userId, int id) {
+        this.zipcode = zipcode;
+        this.country = country;
+        this.city = city;
+        this.street = street;
+        this.userId = userId;
+        this.id = id;
     }
 
     public Address() {
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getZipcode() {
@@ -41,12 +69,12 @@ public class Address {
         this.city = city;
     }
 
-    public String getAddress() {
-        return address;
+    public String getStreet() {
+        return street;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setStreet(String street) {
+        this.street = street;
     }
 
     @Override
@@ -55,7 +83,7 @@ public class Address {
                 "zipcode=" + zipcode +
                 ", country='" + country + '\'' +
                 ", city='" + city + '\'' +
-                ", address='" + address + '\'' +
+                ", street='" + street + '\'' +
                 '}';
     }
 }

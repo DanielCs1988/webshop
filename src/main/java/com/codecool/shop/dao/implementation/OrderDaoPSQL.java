@@ -15,7 +15,8 @@ public class OrderDaoPSQL implements OrderDao {
             rs.getInt("user_id"),
             rs.getLong("payment_id"),
             rs.getString("status"),
-            rs.getDate("date")
+            rs.getDate("date"),
+            new ProductOrderDaoPSQL().getByOrder(rs.getInt("id"))
     );
 
     @Override
@@ -30,8 +31,14 @@ public class OrderDaoPSQL implements OrderDao {
     public Order findActive(int userId) {
         return QueryProcessor.FetchOne(
                 "SELECT id, user_id FROM orders WHERE user_id = ? AND status = 'NEW';",
-                rs -> new Order(rs.getInt("id"), rs.getInt("user_id")),
-                String.valueOf(userId));
+                rs -> {
+                    return new Order(
+                            rs.getInt("id"), rs.getInt("user_id"),
+                            new ProductOrderDaoPSQL().getByOrder(rs.getInt("id"))
+                    );
+                },
+                String.valueOf(userId)
+        );
     }
 
     @Override

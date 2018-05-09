@@ -17,7 +17,7 @@ public class UserDaoPSQL implements UserDao {
 
     @Override
     public int add(User user) {
-        return QueryProcessor.FetchOne(
+        return QueryProcessor.fetchOne(
                 "INSERT INTO users (name, email, password, phone) VALUES (?, ?, ?, ?) RETURNING id;",
                 rs -> rs.getInt("id"),
                 user.getName(), user.getEmail(), user.getPassword(), user.getPhone()
@@ -26,11 +26,11 @@ public class UserDaoPSQL implements UserDao {
 
     @Override
     public User find(int id) {
-        return QueryProcessor.FetchOne("SELECT * FROM users WHERE id = ?::INTEGER;", assembler, String.valueOf(id));
+        return QueryProcessor.fetchOne("SELECT * FROM users WHERE id = ?::INTEGER;", assembler, String.valueOf(id));
     }
 
     @Override
     public void remove(int id) {
-        QueryProcessor.ExecuteUpdate("DELETE FROM users WHERE id = ?::INTEGER;", String.valueOf(id));
+        QueryProcessor.executeUpdate("DELETE FROM users WHERE id = ?::INTEGER;", String.valueOf(id));
     }
 }

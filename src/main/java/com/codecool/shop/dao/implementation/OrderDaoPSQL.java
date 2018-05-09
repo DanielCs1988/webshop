@@ -21,7 +21,7 @@ public class OrderDaoPSQL implements OrderDao {
 
     @Override
     public void add(Order order) {
-        QueryProcessor.ExecuteUpdate(
+        QueryProcessor.executeUpdate(
                 "INSERT INTO orders (user_id) VALUES (?);",
                 String.valueOf(order.getUserId())
         );
@@ -29,7 +29,7 @@ public class OrderDaoPSQL implements OrderDao {
 
     @Override
     public Order findActive(int userId) {
-        return QueryProcessor.FetchOne(
+        return QueryProcessor.fetchOne(
                 "SELECT id, user_id FROM orders WHERE user_id = ? AND status = 'NEW';",
                 rs -> {
                     return new Order(
@@ -43,12 +43,12 @@ public class OrderDaoPSQL implements OrderDao {
 
     @Override
     public void remove(int id) {
-        QueryProcessor.ExecuteUpdate("DELETE FROM orders WHERE id = ?;", String.valueOf(id));
+        QueryProcessor.executeUpdate("DELETE FROM orders WHERE id = ?;", String.valueOf(id));
     }
 
     @Override
     public List<Order> getAllCompleted(int userId) {
-        return QueryProcessor.FetchAll(
+        return QueryProcessor.fetchAll(
                 "SELECT * FROM orders WHERE user_id = ? AND status != 'NEW';",
                 assembler, String.valueOf(userId)
         );
@@ -56,7 +56,7 @@ public class OrderDaoPSQL implements OrderDao {
 
     @Override
     public void update(Order order) {
-        QueryProcessor.ExecuteUpdate(
+        QueryProcessor.executeUpdate(
                 "UPDATE orders SET status = ?, payment_id = ?, date = ? WHERE id = ?;",
                 "PAID", String.valueOf(order.getPaymentId()),
                 LocalDate.now().toString(), String.valueOf(order.getId())

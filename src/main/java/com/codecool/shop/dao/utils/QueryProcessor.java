@@ -7,7 +7,7 @@ import java.util.List;
 
 public class QueryProcessor {
 
-    public static void ExecuteUpdate(String queryLine, String... params) {
+    public static void executeUpdate(String queryLine, String... params) {
         Connection connection = DatabaseConnectionHandler.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(queryLine)){
             int counter = 1;
@@ -22,7 +22,7 @@ public class QueryProcessor {
         }
     }
 
-    public static <T> T FetchOne(String queryLine, ModelAssembler<T> assembler, String... params) {
+    public static <T> T fetchOne(String queryLine, ModelAssembler<T> assembler, String... params) {
         Connection connection = DatabaseConnectionHandler.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(queryLine)) {
 
@@ -44,7 +44,7 @@ public class QueryProcessor {
         return null;
     }
 
-    public static <T> List<T> FetchAll(String queryLine, ModelAssembler<T> assembler, String... params) {
+    public static <T> List<T> fetchAll(String queryLine, ModelAssembler<T> assembler, String... params) {
         Connection connection = DatabaseConnectionHandler.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(queryLine)) {
 

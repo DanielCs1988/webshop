@@ -21,9 +21,11 @@ public class ProductDaoPSQL implements ProductDao {
     );
 
     @Override
-    public void add(Product product) {
-        QueryProcessor.ExecuteUpdate(
-                "INSERT INTO products (name, description, price, currency, image, product_category_id, supplier_id)",
+    public int add(Product product) {
+        return QueryProcessor.fetchOne(
+                "INSERT INTO products (name, description, price, currency, image, product_category_id, supplier_id)" +
+                        " VALUES (?, ?, ?::DOUBLE, ?, ?, ?::INTEGER, ?::INTEGER) RETURNING id;",
+                rs -> rs.getInt("id"),
                 product.getName(),
                 product.getDescription(),
                 String.valueOf(product.getPrice()),
@@ -36,39 +38,39 @@ public class ProductDaoPSQL implements ProductDao {
 
     @Override
     public Product find(int id) {
-        return QueryProcessor.FetchOne("SELECT * FROM products WHERE id = ?;", assembler, String.valueOf(id));
+        return QueryProcessor.fetchOne("SELECT * FROM products WHERE id = ?::INTEGER;", assembler, String.valueOf(id));
     }
 
     @Override
     public void remove(int id) {
-        QueryProcessor.ExecuteUpdate("DELETE FROM products WHERE id = ?;", String.valueOf(id));
+        QueryProcessor.executeUpdate("DELETE FROM products WHERE id = ?::INTEGER;", String.valueOf(id));
     }
 
     @Override
     public List<Product> getAll() {
-        return QueryProcessor.FetchAll("SELECT * FROM products;", assembler);
+        return QueryProcessor.fetchAll("SELECT * FROM products;", assembler);
     }
 
     @Override
     public List<Product> getBySupplier(int supplierId) {
-        return QueryProcessor.FetchAll(
-                "SELECT * FROM products WHERE supplier_id = ?;",
+        return QueryProcessor.fetchAll(
+                "SELECT * FROM products WHERE supplier_id = ?::INTEGER;",
                 assembler, String.valueOf(supplierId)
         );
     }
 
     @Override
     public List<Product> getByProductCategory(int productCategoryId) {
-        return QueryProcessor.FetchAll(
-                "SELECT * FROM products WHERE product_category_id = ?;",
+        return QueryProcessor.fetchAll(
+                "SELECT * FROM products WHERE product_category_id = ?::INTEGER;",
                 assembler, String.valueOf(productCategoryId)
         );
     }
 
     @Override
     public List<Product> getBySupplierAndCategory(int supplierId, int productCategoryId) {
-        return QueryProcessor.FetchAll(
-                "SELECT * FROM products WHERE product_category_id = ? AND supplier_id = ?;",
+        return QueryProcessor.fetchAll(
+                "SELECT * FROM products WHERE product_category_id = ?::INTEGER AND supplier_id = ?::INTEGER;",
                 assembler, String.valueOf(productCategoryId), String.valueOf(supplierId)
         );
     }

@@ -19,7 +19,7 @@ public class ProductCategoryDaoPSQL implements ProductCategoryDao {
 
     @Override
     public int add(ProductCategory category) {
-        return QueryProcessor.FetchOne(
+        return QueryProcessor.fetchOne(
                 "INSERT INTO product_category(name, department, description) VALUES (?, ?, ?) RETURNING id;",
                 rs -> rs.getInt("id"),
                 category.getName(),category.getDepartment(),category.getDescription());
@@ -27,18 +27,18 @@ public class ProductCategoryDaoPSQL implements ProductCategoryDao {
 
     @Override
     public ProductCategory find(int id) {
-        return QueryProcessor.FetchOne("SElECT * FROM product_category WHERE id = ?::INTEGER;", assembler,
+        return QueryProcessor.fetchOne("SElECT * FROM product_category WHERE id = ?::INTEGER;", assembler,
                                         String.valueOf(id));
     }
 
     @Override
     public void remove(int id) {
-        QueryProcessor.ExecuteUpdate("DELETE FROM product_category WHERE id = ?::INTEGER;", String.valueOf(id));
+        QueryProcessor.executeUpdate("DELETE FROM product_category WHERE id = ?::INTEGER;", String.valueOf(id));
     }
 
     @Override
     public List<ProductCategory> getAll() {
-        return QueryProcessor.FetchAll("SELECT * FROM product_category;", assembler);
+        return QueryProcessor.fetchAll("SELECT * FROM product_category;", assembler);
     }
 }
 

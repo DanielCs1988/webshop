@@ -17,7 +17,7 @@ public class SupplierDaoPSQL implements SupplierDao {
 
     @Override
     public int add(Supplier supplier) {
-        return QueryProcessor.FetchOne(
+        return QueryProcessor.fetchOne(
                 "INSERT INTO suppliers (name, description) VALUES (?,?) RETURNING id;",
                 rs -> rs.getInt("id"),
                 supplier.getName(), supplier.getDescription()
@@ -26,16 +26,16 @@ public class SupplierDaoPSQL implements SupplierDao {
 
     @Override
     public Supplier find(int id) {
-        return QueryProcessor.FetchOne("SELECT * FROM suppliers WHERE id = ?::INTEGER;",assembler,String.valueOf(id));
+        return QueryProcessor.fetchOne("SELECT * FROM suppliers WHERE id = ?::INTEGER;",assembler,String.valueOf(id));
     }
 
     @Override
     public void remove(int id) {
-        QueryProcessor.ExecuteUpdate("DELETE FROM suppliers WHERE id = ?::INTEGER;", String.valueOf(id));
+        QueryProcessor.executeUpdate("DELETE FROM suppliers WHERE id = ?::INTEGER;", String.valueOf(id));
     }
 
     @Override
     public List getAll() {
-        return QueryProcessor.FetchAll("SELECT * FROM suppliers;", assembler);
+        return QueryProcessor.fetchAll("SELECT * FROM suppliers;", assembler);
     }
 }

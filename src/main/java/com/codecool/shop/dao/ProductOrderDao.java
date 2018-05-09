@@ -6,7 +6,8 @@ import java.util.List;
 
 public interface ProductOrderDao {
 
-    void add(ProductOrder productOrder);
+    int add(ProductOrder productOrder);
+    ProductOrder find(int id);
     void updateQuantity(int id, int quantity);
     void remove(int id);
     List<ProductOrder> getByOrder(int orderId);

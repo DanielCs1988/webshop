@@ -18,7 +18,7 @@ public class AddressDaoPSQL implements AddressDao {
 
     @Override
     public int add(Address address) {
-        return QueryProcessor.FetchOne(
+        return QueryProcessor.fetchOne(
                 "INSERT INTO addresses (zip_code, country, city, street, user_id)" +
                         " VALUES (?, ?, ?, ?, ?::INTEGER) RETURNING id;",
                 rs -> rs.getInt("id"),
@@ -29,17 +29,17 @@ public class AddressDaoPSQL implements AddressDao {
 
     @Override
     public Address find(int id) {
-        return QueryProcessor.FetchOne("SELECT * FROM addresses WHERE id = ?::INTEGER;", assembler, String.valueOf(id));
+        return QueryProcessor.fetchOne("SELECT * FROM addresses WHERE id = ?::INTEGER;", assembler, String.valueOf(id));
     }
 
     @Override
     public void remove(int id) {
-        QueryProcessor.ExecuteUpdate("DELETE FROM addresses WHERE id = ?::INTEGER;",String.valueOf(id));
+        QueryProcessor.executeUpdate("DELETE FROM addresses WHERE id = ?::INTEGER;",String.valueOf(id));
     }
 
     @Override
     public void modify(Address address) {
-        QueryProcessor.ExecuteUpdate(
+        QueryProcessor.executeUpdate(
                 "UPDATE addresses SET zip_code = ?, country = ?, city = ?, street = ? WHERE id = ?::INTEGER;",
                 address.getZipcode(), address.getCountry(), address.getCity(),
                 address.getStreet(), String.valueOf(address.getId())

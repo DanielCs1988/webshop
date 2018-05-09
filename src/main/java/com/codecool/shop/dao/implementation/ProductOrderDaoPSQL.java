@@ -1,15 +1,27 @@
 package com.codecool.shop.dao.implementation;
 
+import com.codecool.shop.dao.ModelAssembler;
 import com.codecool.shop.dao.ProductOrderDao;
+import com.codecool.shop.dao.utils.QueryProcessor;
 import com.codecool.shop.model.ProductOrder;
 
 import java.util.List;
 
 public class ProductOrderDaoPSQL implements ProductOrderDao {
 
+    private ModelAssembler<ProductOrder> assembler = rs -> new ProductOrder(
+            rs.getInt("id"),
+            rs.getInt("order_id"),
+            rs.getInt("product_id"),
+            rs.getInt("quantity"),
+            new ProductDaoPSQL().find(rs.getInt("product_id"))
+    );
+
     @Override
     public void add(ProductOrder productOrder) {
-
+        QueryProcessor.ExecuteUpdate("INSERT INTO product_orders (order_id,product_id,quantity)" +
+                                                "VALUES (?,?,1)",String.valueOf(productOrder.getOrderId()),
+                                                String.valueOf(productOrder.getProductId()));
     }
 
     @Override
@@ -24,6 +36,8 @@ public class ProductOrderDaoPSQL implements ProductOrderDao {
 
     @Override
     public List<ProductOrder> getByOrder(int orderId) {
-        return null;
+
+        return QueryProcessor.FetchAll("SELECT * FROM product_orders WHERE order_id = ?;",
+                assembler, String.valueOf(orderId));
     }
 }

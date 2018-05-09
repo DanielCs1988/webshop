@@ -26,12 +26,15 @@ public class ProductOrderDaoPSQL implements ProductOrderDao {
 
     @Override
     public void updateQuantity(int id, int quantity) {
-
+        QueryProcessor.ExecuteUpdate(
+                "UPDATE product_orders SET quantity = ? WHERE id = ?",
+                String.valueOf(quantity), String.valueOf(id)
+        );
     }
 
     @Override
     public void remove(int id) {
-
+        QueryProcessor.ExecuteUpdate("DELETE FROM product_orders WHERE id = ?", String.valueOf(id));
     }
 
     @Override

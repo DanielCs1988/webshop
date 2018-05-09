@@ -2,7 +2,6 @@ package com.codecool.shop.controller;
 
 import com.codecool.shop.MailSender;
 import com.codecool.shop.dao.OrderDao;
-import com.codecool.shop.dao.implementation.OrderDaoMem;
 import com.codecool.shop.model.Address;
 import com.codecool.shop.model.Order;
 import com.google.gson.Gson;
@@ -21,7 +20,7 @@ public class OrderController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        OrderDao shoppingCartDataStore = OrderDaoMem.getInstance();
+        //OrderDao shoppingCartDataStore = OrderDaoMem.getInstance();
         StringBuilder rawData = new StringBuilder();
         BufferedReader reader = req.getReader();
         String input;
@@ -30,7 +29,7 @@ public class OrderController extends HttpServlet {
             rawData.append(input);
         }
         Order order = gson.fromJson(rawData.toString(), Order.class);
-        shoppingCartDataStore.add(order);
+        //shoppingCartDataStore.add(order);
         System.out.println(order);
         logOrder(rawData.toString(), order.getId());
         // sendMail(order);

@@ -1,12 +1,9 @@
 package com.codecool.shop.model;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 public class ProductCategory extends BaseModel {
 
     private String department;
-    private Set<Integer> suppliers = new LinkedHashSet<>();
 
     public ProductCategory(String name, String department, String description) {
         super(name, description);
@@ -22,21 +19,13 @@ public class ProductCategory extends BaseModel {
         return department;
     }
 
-    public void setDepartment(String department) {
-        this.department = department;
-    }
-
-    public void setSuppliers(Integer supplierId) { this.suppliers.add(supplierId); }
-
+    @Override
     public String toString() {
-        return String.format(
-                "id: %1$d," +
-                        "name: %2$s, " +
-                        "department: %3$s, " +
-                        "description: %4$s",
-                this.getId(),
-                this.name,
-                this.department,
-                this.description);
+        return "ProductCategory{" +
+                "department='" + department + '\'' +
+                ", id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
 }

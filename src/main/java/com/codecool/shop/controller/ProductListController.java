@@ -1,7 +1,7 @@
 package com.codecool.shop.controller;
 
 import com.codecool.shop.dao.ProductDao;
-import com.codecool.shop.dao.implementation.ProductDaoMem;
+import com.codecool.shop.dao.implementation.ProductDaoPSQL;
 import com.codecool.shop.model.Product;
 import com.google.gson.Gson;
 
@@ -19,7 +19,7 @@ public class ProductListController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ProductDao productDataStore = ProductDaoMem.getInstance();
+        ProductDao productDataStore = new ProductDaoPSQL();
         String supplier = req.getParameter("supplier");
         String productCategory = req.getParameter("product-category");
         List<Product> products = queryProductData(productDataStore, supplier, productCategory);

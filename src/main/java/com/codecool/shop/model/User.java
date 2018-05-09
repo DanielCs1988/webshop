@@ -1,5 +1,7 @@
 package com.codecool.shop.model;
 
+import java.util.Objects;
+
 public class User {
 
     private int id;
@@ -41,5 +43,20 @@ public class User {
 
     public String getPhone() {
         return phone;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                '}';
     }
 }

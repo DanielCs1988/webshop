@@ -8,9 +8,8 @@ import java.util.List;
 public class QueryProcessor {
 
     public static void ExecuteUpdate(String queryLine, String... params) {
-        try (Connection connection = DatabaseConnectionHandler.getConnection();
-             PreparedStatement statement = connection.prepareStatement(queryLine)
-        ){
+        Connection connection = DatabaseConnectionHandler.getConnection();
+        try (PreparedStatement statement = connection.prepareStatement(queryLine)){
             int counter = 1;
             for (String param : params) {
                 statement.setString(counter++, param);
@@ -24,8 +23,8 @@ public class QueryProcessor {
     }
 
     public static <T> T FetchOne(String queryLine, ModelAssembler<T> assembler, String... params) {
-        try (Connection connection = DatabaseConnectionHandler.getConnection();
-             PreparedStatement statement = connection.prepareStatement(queryLine)) {
+        Connection connection = DatabaseConnectionHandler.getConnection();
+        try (PreparedStatement statement = connection.prepareStatement(queryLine)) {
 
             int counter = 1;
             for (String param : params) {
@@ -33,7 +32,10 @@ public class QueryProcessor {
             }
 
             ResultSet rs = statement.executeQuery();
-            return assembler.assemble(rs);
+            if (rs.next()) {
+                return assembler.assemble(rs);
+            }
+            return null;
 
         } catch (SQLException e) {
             System.out.println("Database Error!");
@@ -43,8 +45,8 @@ public class QueryProcessor {
     }
 
     public static <T> List<T> FetchAll(String queryLine, ModelAssembler<T> assembler, String... params) {
-        try (Connection connection = DatabaseConnectionHandler.getConnection();
-             PreparedStatement statement = connection.prepareStatement(queryLine)) {
+        Connection connection = DatabaseConnectionHandler.getConnection();
+        try (PreparedStatement statement = connection.prepareStatement(queryLine)) {
 
             int counter = 1;
             for (String param : params) {

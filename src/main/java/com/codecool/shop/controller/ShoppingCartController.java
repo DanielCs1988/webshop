@@ -1,8 +1,8 @@
 package com.codecool.shop.controller;
 
 import com.codecool.shop.MailSender;
-import com.codecool.shop.dao.ShoppingCartDao;
-import com.codecool.shop.dao.implementation.ShoppingCartDaoMem;
+import com.codecool.shop.dao.OrderDao;
+import com.codecool.shop.dao.implementation.OrderDaoMem;
 import com.codecool.shop.model.Address;
 import com.codecool.shop.model.ShoppingCart;
 import com.google.gson.Gson;
@@ -21,7 +21,7 @@ public class ShoppingCartController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ShoppingCartDao shoppingCartDataStore = ShoppingCartDaoMem.getInstance();
+        OrderDao shoppingCartDataStore = OrderDaoMem.getInstance();
         StringBuilder rawData = new StringBuilder();
         BufferedReader reader = req.getReader();
         String input;

@@ -1,13 +1,13 @@
 package com.codecool.shop.dao.implementation;
 
 import com.codecool.shop.dao.ModelAssembler;
-import com.codecool.shop.dao.ShoppingCartDao;
+import com.codecool.shop.dao.OrderDao;
 import com.codecool.shop.dao.utils.QueryProcessor;
 import com.codecool.shop.model.ShoppingCart;
 
 import java.util.*;
 
-public class ShoppingCartDaoPSQL implements ShoppingCartDao {
+public class OrderDaoPSQL implements OrderDao {
 
     ModelAssembler<ShoppingCart> assembler = rs -> {
         Map<Integer, Integer> orders = new HashMap<>();

@@ -4,7 +4,7 @@ import com.codecool.shop.model.ShoppingCart;
 
 import java.util.List;
 
-public interface ShoppingCartDao {
+public interface OrderDao {
 
     void add(ShoppingCart shoppingCart);
     ShoppingCart find(int id);

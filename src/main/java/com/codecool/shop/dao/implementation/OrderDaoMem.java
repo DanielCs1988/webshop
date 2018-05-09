@@ -1,24 +1,24 @@
 package com.codecool.shop.dao.implementation;
 
-import com.codecool.shop.dao.ShoppingCartDao;
+import com.codecool.shop.dao.OrderDao;
 import com.codecool.shop.model.ShoppingCart;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShoppingCartDaoMem implements ShoppingCartDao {
+public class OrderDaoMem implements OrderDao {
     private static List<ShoppingCart> data = new ArrayList<>();
-    private static ShoppingCartDaoMem instance = null;
+    private static OrderDaoMem instance = null;
 
     /* A private Constructor prevents any other class from instantiating.
      */
 
-    private ShoppingCartDaoMem() {
+    private OrderDaoMem() {
     }
 
-    public static ShoppingCartDaoMem getInstance() {
+    public static OrderDaoMem getInstance() {
         if (instance == null) {
-            instance = new ShoppingCartDaoMem();
+            instance = new OrderDaoMem();
         }
         return instance;
     }

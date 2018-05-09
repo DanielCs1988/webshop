@@ -4,7 +4,7 @@ import com.codecool.shop.MailSender;
 import com.codecool.shop.dao.OrderDao;
 import com.codecool.shop.dao.implementation.OrderDaoMem;
 import com.codecool.shop.model.Address;
-import com.codecool.shop.model.ShoppingCart;
+import com.codecool.shop.model.Order;
 import com.google.gson.Gson;
 
 import javax.servlet.ServletException;
@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 
 
 @WebServlet(urlPatterns = {"/webshop/checkout"})
-public class ShoppingCartController extends HttpServlet {
+public class OrderController extends HttpServlet {
 
     private Gson gson = new Gson();
 
@@ -29,15 +29,14 @@ public class ShoppingCartController extends HttpServlet {
         while ((input = reader.readLine()) != null) {
             rawData.append(input);
         }
-        ShoppingCart order = gson.fromJson(rawData.toString(), ShoppingCart.class);
-        order.setId();
+        Order order = gson.fromJson(rawData.toString(), Order.class);
         shoppingCartDataStore.add(order);
         System.out.println(order);
         logOrder(rawData.toString(), order.getId());
-        sendMail(order);
+        // sendMail(order);
     }
 
-    private void sendMail(ShoppingCart order) {
+    /*private void sendMail(Order order) {
         String subject = "Information about order number " + order.getId();
         Address address = order.getUser().getShippingAddress();
         String content = "<h2>Dear " + order.getUser().getName() + "!</h2>" +
@@ -48,7 +47,7 @@ public class ShoppingCartController extends HttpServlet {
                 "<br><p>We hope you have a nice day!<br>Team Codeberg</p>";
         MailSender mailSender = new MailSender(order.getUser().getEmail(), subject, content);
         mailSender.start();
-    }
+    }*/
 
     private void logOrder(String order, int id) {
         LocalDateTime currentDT = LocalDateTime.now();

@@ -1,14 +1,15 @@
 package com.codecool.shop.dao;
 
-import com.codecool.shop.model.ShoppingCart;
+import com.codecool.shop.model.Order;
 
 import java.util.List;
 
 public interface OrderDao {
 
-    void add(ShoppingCart shoppingCart);
-    ShoppingCart find(int id);
+    Order findActive(int userId);
+    void add(Order order);
+    void update(Order order);
     void remove(int id);
-    List<ShoppingCart> getAll(int userId);
+    List<Order> getAllCompleted(int userId);
 
 }

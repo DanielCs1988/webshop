@@ -3,58 +3,35 @@ package com.codecool.shop.dao.implementation;
 import com.codecool.shop.dao.ModelAssembler;
 import com.codecool.shop.dao.OrderDao;
 import com.codecool.shop.dao.utils.QueryProcessor;
-import com.codecool.shop.model.ShoppingCart;
+import com.codecool.shop.model.Order;
 
+import java.time.LocalDate;
 import java.util.*;
 
 public class OrderDaoPSQL implements OrderDao {
 
-    ModelAssembler<ShoppingCart> assembler = rs -> {
-        Map<Integer, Integer> orders = new HashMap<>();
-        int[] productIds = (int[])(rs.getArray("product_ids").getArray());
-        int[] quantities = (int[])(rs.getArray("quantities").getArray());
-        for (int i = 0; i < productIds.length; i++) {
-            orders.put(productIds[i], quantities[i]);
-        }
-        return new ShoppingCart(
-                rs.getInt("id"),
-                rs.getInt("user_id"),
-                rs.getLong("payment_id"),
-                orders
-        );
-    };
+    ModelAssembler<Order> assembler = rs -> new Order(
+            rs.getInt("id"),
+            rs.getInt("user_id"),
+            rs.getLong("payment_id"),
+            rs.getString("status"),
+            rs.getDate("date")
+    );
 
     @Override
-    public void add(ShoppingCart shoppingCart) {
-        int orderId = QueryProcessor.FetchOne(
-                "INSERT INTO orders (user_id, payment_id) VALUES (?, ?) RETURNING id;",
-                rs -> rs.getInt("id"),
-                String.valueOf(shoppingCart.getUserId()),
-                String.valueOf(shoppingCart.getPaymentId())
+    public void add(Order order) {
+        QueryProcessor.ExecuteUpdate(
+                "INSERT INTO orders (user_id) VALUES (?);",
+                String.valueOf(order.getUserId())
         );
-        if (shoppingCart.getOrders().isEmpty()) return;
-
-        StringBuilder sb = new StringBuilder("INSERT INTO product_orders (order_id, product_id, quantity) VALUES ");
-        Map<Integer, Integer> orders = shoppingCart.getOrders();
-        for (Integer productId : orders.keySet()) {
-            sb.append("(")
-                    .append(orderId).append(", ")
-                    .append(productId).append(", ")
-                    .append(orders.get(productId)) .append("), ");
-        }
-        sb.delete(-1, -3).append(";");
-        QueryProcessor.ExecuteUpdate(sb.toString());
     }
 
     @Override
-    public ShoppingCart find(int id) {
-
+    public Order findActive(int userId) {
         return QueryProcessor.FetchOne(
-                "SELECT o.id, user_id, payment_id, ARRAY_AGG(po.product_id), ARRAY_AGG(po.quantity)" +
-                           "FROM orders AS o JOIN product_orders AS po ON o.id = po.order_id" +
-                             "WHERE o.id = ?" +
-                             "GROUP BY o.id, user_id, payment_id;", assembler, String.valueOf(id)
-        );
+                "SELECT id, user_id FROM orders WHERE user_id = ? AND status = 'NEW';",
+                rs -> new Order(rs.getInt("id"), rs.getInt("user_id")),
+                String.valueOf(userId));
     }
 
     @Override
@@ -63,13 +40,19 @@ public class OrderDaoPSQL implements OrderDao {
     }
 
     @Override
-    public List<ShoppingCart> getAll(int userId) {
-
+    public List<Order> getAllCompleted(int userId) {
         return QueryProcessor.FetchAll(
-                "SELECT o.id, user_id, payment_id, ARRAY_AGG(po.product_id), ARRAY_AGG(po.quantity)" +
-                           "FROM orders AS o JOIN product_orders AS po ON o.id = po.order_id" +
-                             "WHERE user_id = ?" +
-                             "GROUP BY o.id, user_id, payment_id;", assembler, String.valueOf(userId)
+                "SELECT * FROM orders WHERE user_id = ? AND status != 'NEW';",
+                assembler, String.valueOf(userId)
+        );
+    }
+
+    @Override
+    public void update(Order order) {
+        QueryProcessor.ExecuteUpdate(
+                "UPDATE orders SET status = ?, payment_id = ?, date = ? WHERE id = ?;",
+                "PAID", String.valueOf(order.getPaymentId()),
+                LocalDate.now().toString(), String.valueOf(order.getId())
         );
     }
 }

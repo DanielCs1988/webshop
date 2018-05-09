@@ -64,7 +64,7 @@ CREATE TABLE public.addresses (
     country character varying,
     city character varying,
     street character varying,
-    user_id integer NOT NULL
+    userId integer NOT NULL
 );
 
 
@@ -99,7 +99,7 @@ ALTER SEQUENCE public.addresses_id_seq OWNED BY public.addresses.id;
 CREATE TABLE public.orders (
     id integer NOT NULL,
     payment_id bigint,
-    user_id integer,
+    userId integer,
     status character varying DEFAULT 'NEW'::character varying NOT NULL,
     date timestamp without time zone
 );
@@ -365,15 +365,15 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 -- Data for Name: addresses; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.addresses (id, zip_code, country, city, street, user_id) VALUES (2, '1060', 'Hungary', 'Budapest', 'Nagymező street 42.', 1);
+INSERT INTO public.addresses (id, zip_code, country, city, street, userId) VALUES (2, '1060', 'Hungary', 'Budapest', 'Nagymező street 42.', 1);
 
 
 --
 -- Data for Name: orders; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.orders (id, payment_id, user_id, status, date) VALUES (2, 987654321, 1, 'NEW', NULL);
-INSERT INTO public.orders (id, payment_id, user_id, status, date) VALUES (1, 123456789, 1, 'NEW', NULL);
+INSERT INTO public.orders (id, payment_id, userId, status, date) VALUES (2, 987654321, 1, 'NEW', NULL);
+INSERT INTO public.orders (id, payment_id, userId, status, date) VALUES (1, 123456789, 1, 'NEW', NULL);
 
 
 --
@@ -524,7 +524,7 @@ ALTER TABLE ONLY public.users
 --
 
 ALTER TABLE ONLY public.addresses
-    ADD CONSTRAINT addresses_users_id_fk FOREIGN KEY (user_id) REFERENCES public.users(id) ON UPDATE CASCADE ON DELETE CASCADE;
+    ADD CONSTRAINT addresses_users_id_fk FOREIGN KEY (userId) REFERENCES public.users(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -532,7 +532,7 @@ ALTER TABLE ONLY public.addresses
 --
 
 ALTER TABLE ONLY public.orders
-    ADD CONSTRAINT orders_users_id_fk FOREIGN KEY (user_id) REFERENCES public.users(id) ON UPDATE CASCADE ON DELETE CASCADE;
+    ADD CONSTRAINT orders_users_id_fk FOREIGN KEY (userId) REFERENCES public.users(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --

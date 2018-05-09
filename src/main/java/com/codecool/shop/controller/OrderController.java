@@ -42,7 +42,7 @@ public class OrderController extends HttpServlet {
         String content = "<h2>Dear " + order.getUser().getName() + "!</h2>" +
                 "<p>Thank you for the purchase, we have received your order.</p>" +
                 "<p>The items will arrive at the following address: </p>" +
-                "" + address.getZipcode() + " " + address.getCountry() + ", " + address.getAddress() + "" +
+                "" + address.getZipcode() + " " + address.getCountry() + ", " + address.getStreet() + "" +
                 "<p>Payment identifier: " + order.getPaymentId() + "</p>" +
                 "<br><p>We hope you have a nice day!<br>Team Codeberg</p>";
         MailSender mailSender = new MailSender(order.getUser().getEmail(), subject, content);

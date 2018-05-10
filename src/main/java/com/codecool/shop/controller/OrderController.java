@@ -1,8 +1,7 @@
 package com.codecool.shop.controller;
 
-import com.codecool.shop.MailSender;
 import com.codecool.shop.dao.OrderDao;
-import com.codecool.shop.model.Address;
+import com.codecool.shop.dao.implementation.OrderDaoPSQL;
 import com.codecool.shop.model.Order;
 import com.google.gson.Gson;
 
@@ -11,27 +10,27 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @WebServlet(urlPatterns = {"/webshop/checkout"})
 public class OrderController extends HttpServlet {
 
     private Gson gson = new Gson();
+    OrderDao orderDaoDataStore = new OrderDaoPSQL();
+
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //OrderDao shoppingCartDataStore = OrderDaoMem.getInstance();
-        StringBuilder rawData = new StringBuilder();
-        BufferedReader reader = req.getReader();
-        String input;
 
-        while ((input = reader.readLine()) != null) {
-            rawData.append(input);
-        }
-        Order order = gson.fromJson(rawData.toString(), Order.class);
+
+        String jsonFromReq = ControllerUtil.requestJsonProcessor(req);
+        Order order = gson.fromJson(jsonFromReq, Order.class);
         //shoppingCartDataStore.add(order);
         System.out.println(order);
-        logOrder(rawData.toString(), order.getId());
+        orderDaoDataStore.add(order);
+        logOrder(jsonFromReq, order.getId());
         // sendMail(order);
     }
 
@@ -47,6 +46,25 @@ public class OrderController extends HttpServlet {
         MailSender mailSender = new MailSender(order.getUser().getEmail(), subject, content);
         mailSender.start();
     }*/
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        PrintWriter out = resp.getWriter();
+        int userId = Integer.valueOf(req.getParameter("user-id"));
+        if (req.getParameter("get-all") != null) {
+            out.println(gson.toJson(orderDaoDataStore.getAllCompleted(userId)));
+        } else if (req.getParameter("get-new")!= null) {
+            out.println(gson.toJson(orderDaoDataStore.findActive(userId)));
+        }
+    }
+
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String orderJson = ControllerUtil.requestJsonProcessor(req);
+        Order order = gson.fromJson(orderJson,Order.class);
+        orderDaoDataStore.update(order);
+    }
 
     private void logOrder(String order, int id) {
         LocalDateTime currentDT = LocalDateTime.now();

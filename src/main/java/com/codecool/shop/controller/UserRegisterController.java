@@ -3,6 +3,7 @@ package com.codecool.shop.controller;
 
 import com.codecool.shop.dao.UserDao;
 import com.codecool.shop.dao.implementation.UserDaoPSQL;
+import com.codecool.shop.model.PasswordStorage;
 import com.codecool.shop.model.User;
 import com.google.gson.Gson;
 

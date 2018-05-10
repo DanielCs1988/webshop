@@ -15,6 +15,9 @@ public class DatabaseConnectionHandler {
 
     private DatabaseConnectionHandler() {
         try {
+            if (configPath == null) {
+                configPath = "./src/main/java/com/codecool/shop/config/productionConfig.json";
+            }
             Config config = getConfig(configPath);
             connection = DriverManager.getConnection(config.path, config.username, config.password);
         } catch (SQLException e) {

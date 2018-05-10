@@ -29,8 +29,8 @@ public class ProductController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (isUnauthorized(req, resp)) return;
-        String input = req.getParameter("product");
+        //if (isUnauthorized(req, resp)) return;
+        String input = ControllerUtil.requestJsonProcessor(req);
         Product newProduct = gson.fromJson(input, Product.class);
         productDataStore.add(newProduct);
         System.out.println(newProduct);
@@ -38,9 +38,8 @@ public class ProductController extends HttpServlet {
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // TODO: handle getting wrong id input
         String productId = req.getParameter("product-id");
-        if (isUnauthorized(req, resp) || productId == null) return;
+        // if (isUnauthorized(req, resp) || productId == null) return;
         productDataStore.remove(Integer.valueOf(productId));
         System.out.println("Product number " + productId + " was removed from the store.");
     }

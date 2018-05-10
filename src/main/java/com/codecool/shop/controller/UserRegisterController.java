@@ -23,7 +23,7 @@ public class UserRegisterController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        String input = req.getParameter("user");
+        String input = ControllerUtil.requestJsonProcessor(req);
         User newUser = gson.fromJson(input, User.class);
         newUser.setPassword(PasswordStorage.createHash(newUser.getPassword()));
         userDataStore.add(newUser);

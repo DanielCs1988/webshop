@@ -28,8 +28,10 @@ public class UserLoginController extends HttpServlet {
         PrintWriter out = resp.getWriter();
         boolean passwordIsValid = PasswordStorage.verifyPassword(currentUser.getPassword(), userDataStore.find(currentUser.getName()).getPassword());
         if(userDataStore.find(currentUser.getName()) == null || !passwordIsValid) {
-            out.print("ERROR");
+            out.print(gson.toJson(null));
         }
-        out.print("SUCCESS");
+        else {
+            out.print(gson.toJson(userDataStore.find(currentUser.getName())));
+        }
     }
 }

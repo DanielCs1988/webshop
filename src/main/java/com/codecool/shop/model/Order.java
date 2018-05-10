@@ -12,11 +12,16 @@ public class Order {
 
     private long paymentId;
     private String status;
-    private Date date;
+    private String date;
 
     private List<ProductOrder> productOrders = new ArrayList<>();
 
     public Order(int userId) {
+        this.userId = userId;
+    }
+
+    public Order(int id, int userId) {
+        this.id = id;
         this.userId = userId;
     }
 
@@ -26,7 +31,15 @@ public class Order {
         this.productOrders = productOrders;
     }
 
-    public Order(int id, int userId, long paymentId, String status, Date date, List<ProductOrder> productOrders) {
+    public Order(int id, int userId, long paymentId, String status, String date) {
+        this.id = id;
+        this.userId = userId;
+        this.paymentId = paymentId;
+        this.status = status;
+        this.date = date;
+    }
+
+    public Order(int id, int userId, long paymentId, String status, String date, List<ProductOrder> productOrders) {
         this.id = id;
         this.userId = userId;
         this.paymentId = paymentId;
@@ -55,7 +68,7 @@ public class Order {
         return status;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
@@ -71,11 +84,23 @@ public class Order {
         this.status = status;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
     public void addProductOrder(ProductOrder productOrder) {
         productOrders.add(productOrder);
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", paymentId=" + paymentId +
+                ", status='" + status + '\'' +
+                ", date=" + date +
+                ", productOrders=" + productOrders +
+                '}';
     }
 }

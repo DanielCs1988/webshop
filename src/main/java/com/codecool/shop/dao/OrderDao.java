@@ -7,6 +7,7 @@ import java.util.List;
 public interface OrderDao {
 
     Order findActive(int userId);
+    Order findById(int id);
     int add(Order order);
     void update(Order order);
     void remove(int id);

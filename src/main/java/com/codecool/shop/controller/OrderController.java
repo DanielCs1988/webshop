@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 
-@WebServlet(urlPatterns = {"/webshop/checkout"})
+@WebServlet(urlPatterns = {"/webshop/checkout2"})
 public class OrderController extends HttpServlet {
 
     private Gson gson = new Gson();

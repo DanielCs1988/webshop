@@ -23,15 +23,21 @@ public class UserLoginController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        String input = req.getParameter("user");
-        User currentUser = gson.fromJson(input, User.class);
+        String userName = req.getParameter("username");
+        String password = req.getParameter("password");
         PrintWriter out = resp.getWriter();
-        boolean passwordIsValid = PasswordStorage.verifyPassword(currentUser.getPassword(), userDataStore.find(currentUser.getName()).getPassword());
-        if(userDataStore.find(currentUser.getName()) == null || !passwordIsValid) {
+
+        if(userDataStore.find(userName) == null) {
             out.print(gson.toJson(null));
         }
         else {
-            out.print(gson.toJson(userDataStore.find(currentUser.getName())));
+            boolean passwordIsValid = PasswordStorage.verifyPassword(password, userDataStore.find(userName).getPassword());
+            if(passwordIsValid){
+                out.print(gson.toJson(userDataStore.find(userName)));
+            } else {
+                out.print(gson.toJson(null));
+            }
+
         }
     }
 }

@@ -31,7 +31,7 @@ public class UserDaoPSQL implements UserDao {
 
     @Override
     public User find(String name) {
-        return QueryProcessor.fetchOne("SELECT * FROM users WHERE id = ?::INTEGER;", assembler, name);
+        return QueryProcessor.fetchOne("SELECT * FROM users WHERE name = ?;", assembler, name);
     }
 
     @Override

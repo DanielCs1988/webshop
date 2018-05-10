@@ -6,6 +6,7 @@ public interface UserDao {
 
     int add(User user);
     User find(int id);
+    User find(String name);
     void remove(int id);
 
 }

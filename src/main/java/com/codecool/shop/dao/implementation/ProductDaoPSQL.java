@@ -24,11 +24,11 @@ public class ProductDaoPSQL implements ProductDao {
     public int add(Product product) {
         return QueryProcessor.fetchOne(
                 "INSERT INTO products (name, description, price, currency, image, product_category_id, supplier_id)" +
-                        " VALUES (?, ?, ?::DOUBLE, ?, ?, ?::INTEGER, ?::INTEGER) RETURNING id;",
+                        " VALUES (?, ?, CAST(? AS DOUBLE PRECISION), ?, ?, ?::INTEGER, ?::INTEGER) RETURNING id;",
                 rs -> rs.getInt("id"),
                 product.getName(),
                 product.getDescription(),
-                String.valueOf(product.getPrice()),
+                String.valueOf(product.getDefaultPrice()),
                 product.getDefaultCurrency().toString(),
                 product.getImageName(),
                 String.valueOf(product.getProductCategory()),
@@ -48,7 +48,7 @@ public class ProductDaoPSQL implements ProductDao {
 
     @Override
     public List<Product> getAll() {
-        return QueryProcessor.fetchAll("SELECT * FROM products;", assembler);
+        return QueryProcessor.fetchAll("SELECT * FROM products ORDER BY id;", assembler);
     }
 
     @Override

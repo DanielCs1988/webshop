@@ -2,60 +2,67 @@ package com.codecool.shop.model;
 
 public class Address {
 
+    private int id;
+    private int userId;
     private String zipcode;
     private String country;
     private String city;
-    private String address;
+    private String street;
 
-    public Address(String zipcode, String country, String city, String address) {
+    public Address(int id, int userId, String zipcode, String country, String city, String street) {
+        this.id = id;
+        this.userId = userId;
         this.zipcode = zipcode;
         this.country = country;
         this.city = city;
-        this.address = address;
+        this.street = street;
     }
 
-    public Address() {
+    public Address(int userId, String zipcode, String country, String city, String street) {
+        this.userId = userId;
+        this.zipcode = zipcode;
+        this.country = country;
+        this.city = city;
+        this.street = street;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public int getUserId() {
+        return userId;
     }
 
     public String getZipcode() {
         return zipcode;
     }
 
-    public void setZipcode(String zipcode) {
-        this.zipcode = zipcode;
-    }
-
     public String getCountry() {
         return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
     }
 
     public String getCity() {
         return city;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public String getStreet() {
+        return street;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override
     public String toString() {
         return "Address{" +
-                "zipcode=" + zipcode +
+                "id=" + id +
+                ", userId=" + userId +
+                ", zipcode='" + zipcode + '\'' +
                 ", country='" + country + '\'' +
                 ", city='" + city + '\'' +
-                ", address='" + address + '\'' +
+                ", street='" + street + '\'' +
                 '}';
     }
 }

@@ -1,7 +1,7 @@
 package com.codecool.shop.controller;
 
 import com.codecool.shop.dao.SupplierDao;
-import com.codecool.shop.dao.implementation.SupplierDaoMem;
+import com.codecool.shop.dao.implementation.SupplierDaoPSQL;
 import com.codecool.shop.model.Supplier;
 import com.google.gson.Gson;
 
@@ -21,7 +21,7 @@ public class SupplierController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
+        SupplierDao supplierDataStore = new SupplierDaoPSQL();
         List<Supplier> suppliers = supplierDataStore.getAll();
         PrintWriter out = resp.getWriter();
         out.print(gson.toJson(suppliers));

@@ -1,12 +1,13 @@
 package com.codecool.shop.dao.utils;
 
+import com.codecool.shop.config.Config;
+import com.codecool.shop.config.DataReader;
+
 import java.sql.*;
 
 public class DatabaseConnectionHandler {
 
-    private static final String DB_PATH = System.getenv("PSQL_PATH");
-    private static final String DB_USER = System.getenv("DB_USER");
-    private static final String DB_PASSWORD = System.getenv("DB_PASSWORD");
+    private static String configPath;
 
     private Connection connection;
 
@@ -14,11 +15,20 @@ public class DatabaseConnectionHandler {
 
     private DatabaseConnectionHandler() {
         try {
-            connection = DriverManager.getConnection(DB_PATH, DB_USER, DB_PASSWORD);
+            Config config = getConfig(configPath);
+            connection = DriverManager.getConnection(config.path, config.username, config.password);
         } catch (SQLException e) {
             System.out.println("Could not establish database connection.");
             e.printStackTrace();
         }
+    }
+
+    public static void setConfigPath(String configPath) {
+        DatabaseConnectionHandler.configPath = configPath;
+    }
+
+    private Config getConfig(String path) {
+        return new DataReader(path).getData(Config.class);
     }
 
     public static synchronized Connection getConnection() {

@@ -1,7 +1,7 @@
 package com.codecool.shop.controller;
 
 import com.codecool.shop.dao.ProductDao;
-import com.codecool.shop.dao.implementation.ProductDaoMem;
+import com.codecool.shop.dao.implementation.ProductDaoPSQL;
 import com.codecool.shop.model.Product;
 import com.google.gson.Gson;
 
@@ -15,7 +15,7 @@ import java.io.PrintWriter;
 public class ProductController extends HttpServlet {
 
     private Gson gson = new Gson();
-    private ProductDao productDataStore = ProductDaoMem.getInstance();
+    private ProductDao productDataStore = new ProductDaoPSQL();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

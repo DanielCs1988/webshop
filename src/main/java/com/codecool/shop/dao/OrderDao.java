@@ -7,7 +7,7 @@ import java.util.List;
 public interface OrderDao {
 
     Order findActive(int userId);
-    void add(Order order);
+    int add(Order order);
     void update(Order order);
     void remove(int id);
     List<Order> getAllCompleted(int userId);

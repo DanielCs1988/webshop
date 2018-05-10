@@ -20,9 +20,10 @@ public class OrderDaoPSQL implements OrderDao {
     );
 
     @Override
-    public void add(Order order) {
-        QueryProcessor.executeUpdate(
-                "INSERT INTO orders (user_id) VALUES (?);",
+    public int add(Order order) {
+        return QueryProcessor.fetchOne(
+                "INSERT INTO orders (user_id) VALUES (?::INTEGER) RETURNING id;",
+                rs -> rs.getInt("id"),
                 String.valueOf(order.getUserId())
         );
     }
@@ -30,7 +31,7 @@ public class OrderDaoPSQL implements OrderDao {
     @Override
     public Order findActive(int userId) {
         return QueryProcessor.fetchOne(
-                "SELECT id, user_id FROM orders WHERE user_id = ? AND status = 'NEW';",
+                "SELECT id, user_id FROM orders WHERE user_id = ?::INTEGER AND status = 'NEW';",
                 rs -> {
                     return new Order(
                             rs.getInt("id"), rs.getInt("user_id"),
@@ -43,13 +44,13 @@ public class OrderDaoPSQL implements OrderDao {
 
     @Override
     public void remove(int id) {
-        QueryProcessor.executeUpdate("DELETE FROM orders WHERE id = ?;", String.valueOf(id));
+        QueryProcessor.executeUpdate("DELETE FROM orders WHERE id = ?::INTEGER;", String.valueOf(id));
     }
 
     @Override
     public List<Order> getAllCompleted(int userId) {
         return QueryProcessor.fetchAll(
-                "SELECT * FROM orders WHERE user_id = ? AND status != 'NEW';",
+                "SELECT * FROM orders WHERE user_id = ?::INTEGER AND status != 'NEW';",
                 assembler, String.valueOf(userId)
         );
     }
@@ -57,7 +58,7 @@ public class OrderDaoPSQL implements OrderDao {
     @Override
     public void update(Order order) {
         QueryProcessor.executeUpdate(
-                "UPDATE orders SET status = ?, payment_id = ?, date = ? WHERE id = ?;",
+                "UPDATE orders SET status = ?, payment_id = ?::INTEGER, date = ? WHERE id = ?::INTEGER;",
                 "PAID", String.valueOf(order.getPaymentId()),
                 LocalDate.now().toString(), String.valueOf(order.getId())
         );

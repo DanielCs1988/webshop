@@ -1,5 +1,7 @@
 package com.codecool.shop.model;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -12,7 +14,11 @@ public class Order {
     private String status;
     private Date date;
 
-    private List<ProductOrder> productOrders;
+    private List<ProductOrder> productOrders = new ArrayList<>();
+
+    public Order(int userId) {
+        this.userId = userId;
+    }
 
     public Order(int id, int userId, List<ProductOrder> productOrders) {
         this.id = id;
@@ -29,15 +35,12 @@ public class Order {
         this.productOrders = productOrders;
     }
 
-    public Order(int userId, long paymentId, String status, Date date) {
-        this.userId = userId;
-        this.paymentId = paymentId;
-        this.status = status;
-        this.date = date;
-    }
-
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getUserId() {
@@ -57,6 +60,22 @@ public class Order {
     }
 
     public List<ProductOrder> getProductOrders() {
-        return productOrders;
+        return Collections.unmodifiableList(productOrders);
+    }
+
+    public void setPaymentId(long paymentId) {
+        this.paymentId = paymentId;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public void addProductOrder(ProductOrder productOrder) {
+        productOrders.add(productOrder);
     }
 }

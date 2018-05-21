@@ -35,7 +35,7 @@ public class SupplierDaoPSQL implements SupplierDao {
     }
 
     @Override
-    public List getAll() {
+    public List<Supplier> getAll() {
         return QueryProcessor.fetchAll("SELECT * FROM suppliers;", assembler);
     }
 }

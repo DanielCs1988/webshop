@@ -10,7 +10,7 @@ public class Order {
     private int id;
     private int userId;
 
-    private long paymentId;
+    private String paymentId;
     private String status;
     private String date;
 
@@ -31,7 +31,7 @@ public class Order {
         this.productOrders = productOrders;
     }
 
-    public Order(int id, int userId, long paymentId, String status, String date) {
+    public Order(int id, int userId, String paymentId, String status, String date) {
         this.id = id;
         this.userId = userId;
         this.paymentId = paymentId;
@@ -39,7 +39,7 @@ public class Order {
         this.date = date;
     }
 
-    public Order(int id, int userId, long paymentId, String status, String date, List<ProductOrder> productOrders) {
+    public Order(int id, int userId, String paymentId, String status, String date, List<ProductOrder> productOrders) {
         this.id = id;
         this.userId = userId;
         this.paymentId = paymentId;
@@ -60,7 +60,7 @@ public class Order {
         return userId;
     }
 
-    public long getPaymentId() {
+    public String getPaymentId() {
         return paymentId;
     }
 
@@ -76,7 +76,7 @@ public class Order {
         return Collections.unmodifiableList(productOrders);
     }
 
-    public void setPaymentId(long paymentId) {
+    public void setPaymentId(String paymentId) {
         this.paymentId = paymentId;
     }
 

@@ -1,11 +1,11 @@
-package com.codecool.shop.controller;
+package com.codecool.shop.utils;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
 
-public class ControllerUtil extends HttpServlet {
+public class RequestJSONProcessor extends HttpServlet {
 
     public static String requestJsonProcessor(HttpServletRequest req) throws IOException {
         StringBuilder rawData = new StringBuilder();

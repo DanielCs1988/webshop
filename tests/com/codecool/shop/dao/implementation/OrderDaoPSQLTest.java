@@ -31,14 +31,14 @@ class OrderDaoPSQLTest {
 
     @Test
     void add() {
-        int id = dao.add(testOrder);
+        int id = dao.createOrder(testOrder);
         testOrder.setId(id);
         dao.remove(id);
     }
 
     @Test
     void testAddingDuplicatesRestricted() {
-        assertThrows(IllegalStateException.class, () -> dao.add(new Order(1)));
+        assertThrows(IllegalStateException.class, () -> dao.createOrder(new Order(1)));
     }
 
     @Test
@@ -62,7 +62,7 @@ class OrderDaoPSQLTest {
 
     @Test
     void remove() {
-        int id = dao.add(testOrder);
+        int id = dao.createOrder(testOrder);
         dao.remove(id);
         assertNull(dao.findActive(30));
     }
@@ -96,10 +96,10 @@ class OrderDaoPSQLTest {
 
     @Test
     void update() {
-        int id = dao.add(testOrder);
+        int id = dao.createOrder(testOrder);
         testOrder.setId(id);
         testOrder.setPaymentId(1337);
-        dao.update(testOrder);
+        dao.finalizeOrder(testOrder);
         Order orderInDB = dao.findById(id);
         assertEquals(1337, orderInDB.getPaymentId());
         assertEquals("PAID", orderInDB.getStatus());

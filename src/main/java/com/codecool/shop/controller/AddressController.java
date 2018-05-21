@@ -5,6 +5,7 @@ import com.codecool.shop.dao.ProductDao;
 import com.codecool.shop.dao.implementation.AddressDaoPSQL;
 import com.codecool.shop.dao.implementation.ProductDaoPSQL;
 import com.codecool.shop.model.Address;
+import com.codecool.shop.utils.AuthGuard;
 import com.google.gson.Gson;
 
 import javax.servlet.ServletException;
@@ -20,17 +21,21 @@ import java.io.PrintWriter;
 public class AddressController extends HttpServlet {
 
     private Gson gson = new Gson();
+    private AuthGuard authGuard = new AuthGuard();
     AddressDao addressDataStore = new AddressDaoPSQL();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int userId = authGuard.processToken(req, resp);
+        if (userId == -1) return;
         PrintWriter out = resp.getWriter();
-        int userId = Integer.valueOf(req.getParameter("user-id"));
         out.println(gson.toJson(addressDataStore.find(userId)));
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int userId = authGuard.processToken(req, resp);
+        if (userId == -1) return;
         PrintWriter out = resp.getWriter();
         String addressJson = ControllerUtil.requestJsonProcessor(req);
         Address address = gson.fromJson(addressJson, Address.class);
@@ -39,8 +44,12 @@ public class AddressController extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int userId = authGuard.processToken(req, resp);
         String addressJson = ControllerUtil.requestJsonProcessor(req);
         Address address = gson.fromJson(addressJson, Address.class);
+        if (userId == -1 || userId != address.getUserId()) return;
         addressDataStore.modify(address);
     }
 }
+
+// te1WB4uI7YjGBMbyeZqhFfmjaXfWQM

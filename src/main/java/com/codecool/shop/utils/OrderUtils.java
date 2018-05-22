@@ -39,7 +39,7 @@ public class OrderUtils {
         "<p>The items will arrive at the following address:<br>" +
         address.getZipcode() + " " + address.getCountry() + ", " + address.getStreet() + "</p>" +
         "<p>Your payment identifier: " + order.getPaymentId() + "</p>" +
-        "<h3>Purchased items</h3><table><th>Name</th><th>Unit Price</th>Quantity<th>Name</th></table>";
+        "<h3>Purchased items</h3><table><th>Name</th><th>Unit Price</th><th>Quantity</th>";
         String end = "<br><p>We hope you have a nice day!<br>Team Codeberg</p>";
 
         StringBuilder sb = new StringBuilder(orderDetails);

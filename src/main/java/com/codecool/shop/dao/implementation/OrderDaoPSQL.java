@@ -74,14 +74,7 @@ public class OrderDaoPSQL implements OrderDao {
     public Order findById(int id) {
         return QueryProcessor.fetchOne(
                 "SELECT * FROM orders WHERE id = ?::INTEGER;",
-                rs -> new Order(
-                        rs.getInt("id"),
-                        rs.getInt("user_id"),
-                        rs.getString("payment_id"),
-                        rs.getString("status"),
-                        rs.getString("date")
-                ),
-                String.valueOf(id)
+                assembler, String.valueOf(id)
         );
     }
 }

@@ -2,80 +2,58 @@ package com.codecool.shop.controller;
 
 import com.codecool.shop.dao.OrderDao;
 import com.codecool.shop.dao.implementation.OrderDaoPSQL;
+import com.codecool.shop.model.Address;
 import com.codecool.shop.model.Order;
+import com.codecool.shop.utils.AuthGuard;
+import com.codecool.shop.utils.OrderUtils;
 import com.google.gson.Gson;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.*;
-import java.time.LocalDateTime;
-import java.util.List;
 
 
-@WebServlet(urlPatterns = {"/webshop/checkout"})
+@WebServlet(urlPatterns = {"/webshop/order"})
 public class OrderController extends HttpServlet {
 
     private Gson gson = new Gson();
-    OrderDao orderDaoDataStore = new OrderDaoPSQL();
+    private AuthGuard authGuard = new AuthGuard();
+    private OrderDao orderDaoDataStore = new OrderDaoPSQL();
 
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //OrderDao shoppingCartDataStore = OrderDaoMem.getInstance();
-
-
-        String jsonFromReq = ControllerUtil.requestJsonProcessor(req);
-        Order order = gson.fromJson(jsonFromReq, Order.class);
-        //shoppingCartDataStore.add(order);
-        System.out.println(order);
-        orderDaoDataStore.add(order);
-        logOrder(jsonFromReq, order.getId());
-        // sendMail(order);
-    }
-
-    /*private void sendMail(Order order) {
-        String subject = "Information about order number " + order.getId();
-        Address address = order.getUser().getShippingAddress();
-        String content = "<h2>Dear " + order.getUser().getName() + "!</h2>" +
-                "<p>Thank you for the purchase, we have received your order.</p>" +
-                "<p>The items will arrive at the following address: </p>" +
-                "" + address.getZipcode() + " " + address.getCountry() + ", " + address.getStreet() + "" +
-                "<p>Payment identifier: " + order.getPaymentId() + "</p>" +
-                "<br><p>We hope you have a nice day!<br>Team Codeberg</p>";
-        MailSender mailSender = new MailSender(order.getUser().getEmail(), subject, content);
-        mailSender.start();
-    }*/
-
+    /*
+     * Returns the active shopping cart of the user if there is one,
+     * creates a new one otherwise and returns that.
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int userId = authGuard.processToken(req, resp);
+        if (userId == -1) return;
         PrintWriter out = resp.getWriter();
-        int userId = Integer.valueOf(req.getParameter("user-id"));
-        if (req.getParameter("get-all") != null) {
+        if (req.getParameter("get-all") == null) {
+            Order order = orderDaoDataStore.findActive(userId);
+            if (order == null) {
+                order = new Order(orderDaoDataStore.createOrder(userId), userId);
+            }
+            out.println(gson.toJson(order));
+        } else {
             out.println(gson.toJson(orderDaoDataStore.getAllCompleted(userId)));
-        } else if (req.getParameter("get-new")!= null) {
-            out.println(gson.toJson(orderDaoDataStore.findActive(userId)));
         }
     }
 
-
+    /*
+     * Finalizes the order by adding the payment ID, then logs it and sends an email.
+     */
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String orderJson = ControllerUtil.requestJsonProcessor(req);
-        Order order = gson.fromJson(orderJson,Order.class);
-        orderDaoDataStore.update(order);
-    }
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int userId = authGuard.processToken(req, resp);
+        if (userId == -1) return;
+        int orderId = Integer.parseInt(req.getParameter("id"));
+        String paymentId = req.getParameter("paymentId");
 
-    private void logOrder(String order, int id) {
-        LocalDateTime currentDT = LocalDateTime.now();
-        String filename = "./orders/order" + id + "_" + currentDT.getYear() + currentDT.getMonthValue()
-                + currentDT.getDayOfMonth() + ".json";
-        try {
-            PrintWriter writer = new PrintWriter(filename, "UTF-8");
-            writer.println(order);
-            writer.close();
-        } catch (FileNotFoundException | UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        orderDaoDataStore.finalizeOrder(orderId, paymentId);
+        Order fullOrder = orderDaoDataStore.findById(orderId);
+        OrderUtils.logOrder(fullOrder);
+        OrderUtils.sendMail(fullOrder);
     }
 }

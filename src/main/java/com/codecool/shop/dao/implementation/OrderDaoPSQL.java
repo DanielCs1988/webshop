@@ -15,21 +15,21 @@ public class OrderDaoPSQL implements OrderDao {
     ModelAssembler<Order> assembler = rs -> new Order(
             rs.getInt("id"),
             rs.getInt("user_id"),
-            rs.getLong("payment_id"),
+            rs.getString("payment_id"),
             rs.getString("status"),
             rs.getString("date"),
             new ProductOrderDaoPSQL().getByOrder(rs.getInt("id"))
     );
 
     @Override
-    public int add(Order order) {
-        if (findActive(order.getUserId()) != null) {
+    public int createOrder(int userId) {
+        if (findActive(userId) != null) {
             throw new IllegalStateException("WARNING: LIMIT REACHED. There is already an open order in the database!");
         }
         return QueryProcessor.fetchOne(
                 "INSERT INTO orders (user_id) VALUES (?::INTEGER) RETURNING id;",
                 rs -> rs.getInt("id"),
-                String.valueOf(order.getUserId())
+                String.valueOf(userId)
         );
     }
 
@@ -61,12 +61,12 @@ public class OrderDaoPSQL implements OrderDao {
     }
 
     @Override
-    public void update(Order order) {
+    public void finalizeOrder(int id, String paymentId) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         QueryProcessor.executeUpdate(
-                "UPDATE orders SET status = ?, payment_id = ?::INTEGER, date = ? WHERE id = ?::INTEGER;",
-                "PAID", String.valueOf(order.getPaymentId()),
-                LocalDateTime.now().format(formatter), String.valueOf(order.getId())
+                "UPDATE orders SET status = 'PAID', payment_id = ?, date = ? " +
+                           "WHERE id = ?::INTEGER AND status = 'NEW';",
+                paymentId, LocalDateTime.now().format(formatter), String.valueOf(id)
         );
     }
 
@@ -74,14 +74,7 @@ public class OrderDaoPSQL implements OrderDao {
     public Order findById(int id) {
         return QueryProcessor.fetchOne(
                 "SELECT * FROM orders WHERE id = ?::INTEGER;",
-                rs -> new Order(
-                        rs.getInt("id"),
-                        rs.getInt("user_id"),
-                        rs.getLong("payment_id"),
-                        rs.getString("status"),
-                        rs.getString("date")
-                ),
-                String.valueOf(id)
+                assembler, String.valueOf(id)
         );
     }
 }

@@ -28,8 +28,9 @@ public class AddressDaoPSQL implements AddressDao {
     }
 
     @Override
-    public Address find(int id) {
-        return QueryProcessor.fetchOne("SELECT * FROM addresses WHERE id = ?::INTEGER;", assembler, String.valueOf(id));
+    public Address find(int userId) {
+        return QueryProcessor.fetchOne("SELECT * FROM addresses WHERE user_id = ?::INTEGER;",
+                assembler, String.valueOf(userId));
     }
 
     @Override

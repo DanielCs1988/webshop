@@ -15,6 +15,41 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET row_security = off;
 
+--
+-- Name: codecoolshop_test; Type: DATABASE; Schema: -; Owner: postgres
+--
+
+CREATE DATABASE codecoolshop_test WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'Hungarian_Hungary.1250' LC_CTYPE = 'Hungarian_Hungary.1250';
+
+
+ALTER DATABASE codecoolshop_test OWNER TO postgres;
+
+\connect codecoolshop_test
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
 SET default_tablespace = '';
 
 SET default_with_oids = false;
@@ -66,7 +101,7 @@ CREATE TABLE public.orders (
     payment_id bigint,
     user_id integer,
     status character varying DEFAULT 'NEW'::character varying NOT NULL,
-    date timestamp without time zone
+    date character varying
 );
 
 
@@ -177,7 +212,8 @@ CREATE TABLE public.products (
     price double precision NOT NULL,
     currency character varying NOT NULL,
     product_category_id integer,
-    supplier_id integer
+    supplier_id integer,
+    image character varying
 );
 
 
@@ -330,8 +366,8 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 -- Data for Name: addresses; Type: TABLE DATA; Schema: public; Owner: danielcs88
 --
 
-INSERT INTO public.addresses (id, zip_code, country, city, street, user_id) VALUES (2, '1060', 'Hungary', 'Budapest', 'Nagymező street 42.', 1);
 INSERT INTO public.addresses (id, zip_code, country, city, street, user_id) VALUES (5, '12345', 'United Kingdom', 'London', 'Brewer''s street 66.', 3);
+INSERT INTO public.addresses (id, zip_code, country, city, street, user_id) VALUES (2, '1060', 'Hungary', 'Budapest', 'Nagymező street 42.', 1);
 
 
 --
@@ -340,10 +376,10 @@ INSERT INTO public.addresses (id, zip_code, country, city, street, user_id) VALU
 
 INSERT INTO public.orders (id, payment_id, user_id, status, date) VALUES (2, 987654321, 1, 'NEW', NULL);
 INSERT INTO public.orders (id, payment_id, user_id, status, date) VALUES (1, 123456789, 3, 'NEW', NULL);
-INSERT INTO public.orders (id, payment_id, user_id, status, date) VALUES (4, 5345345445, 1, 'PAID', '2018-05-09 13:23:23.206');
-INSERT INTO public.orders (id, payment_id, user_id, status, date) VALUES (5, 636456464, 1, 'PAID', '2018-04-12 09:21:41.34');
-INSERT INTO public.orders (id, payment_id, user_id, status, date) VALUES (6, 43434234, 3, 'PAID', '2018-02-16 20:24:14.188');
-INSERT INTO public.orders (id, payment_id, user_id, status, date) VALUES (7, 8984234, 3, 'PAID', '2018-05-01 07:24:39.832');
+INSERT INTO public.orders (id, payment_id, user_id, status, date) VALUES (5, 636456464, 1, 'PAID', '2018-04-12 7:11:55');
+INSERT INTO public.orders (id, payment_id, user_id, status, date) VALUES (4, 5345345445, 1, 'PAID', '2018-05-09 9:46:00');
+INSERT INTO public.orders (id, payment_id, user_id, status, date) VALUES (6, 43434234, 3, 'PAID', '2018-02-16 13:32:24');
+INSERT INTO public.orders (id, payment_id, user_id, status, date) VALUES (7, 8984234, 3, 'PAID', '2018-05-01 21:12:10');
 
 
 --
@@ -361,8 +397,6 @@ INSERT INTO public.product_category (id, name, description, department) VALUES (
 
 INSERT INTO public.product_orders (id, order_id, product_id, quantity) VALUES (1, 1, 1, 3);
 INSERT INTO public.product_orders (id, order_id, product_id, quantity) VALUES (2, 2, 1, 7);
-INSERT INTO public.product_orders (id, order_id, product_id, quantity) VALUES (4, 1, 1, 7);
-INSERT INTO public.product_orders (id, order_id, product_id, quantity) VALUES (5, 1, 1, 10);
 INSERT INTO public.product_orders (id, order_id, product_id, quantity) VALUES (6, 4, 2, 100);
 INSERT INTO public.product_orders (id, order_id, product_id, quantity) VALUES (7, 4, 3, 1);
 INSERT INTO public.product_orders (id, order_id, product_id, quantity) VALUES (8, 4, 1, 5);
@@ -371,15 +405,17 @@ INSERT INTO public.product_orders (id, order_id, product_id, quantity) VALUES (1
 INSERT INTO public.product_orders (id, order_id, product_id, quantity) VALUES (11, 6, 1, 2);
 INSERT INTO public.product_orders (id, order_id, product_id, quantity) VALUES (12, 7, 3, 10);
 INSERT INTO public.product_orders (id, order_id, product_id, quantity) VALUES (13, 7, 2, 5000);
+INSERT INTO public.product_orders (id, order_id, product_id, quantity) VALUES (4, 1, 2, 7);
+INSERT INTO public.product_orders (id, order_id, product_id, quantity) VALUES (5, 1, 3, 10);
 
 
 --
 -- Data for Name: products; Type: TABLE DATA; Schema: public; Owner: danielcs88
 --
 
-INSERT INTO public.products (id, name, description, price, currency, product_category_id, supplier_id) VALUES (1, 'Samsung Galaxy S8', 'A phone.', 500, 'USD', 1, 1);
-INSERT INTO public.products (id, name, description, price, currency, product_category_id, supplier_id) VALUES (2, 'Milka Dark', 'Dark chocolate from the Alps.', 1, 'USD', 3, 3);
-INSERT INTO public.products (id, name, description, price, currency, product_category_id, supplier_id) VALUES (3, 'UltraBook 9001', 'Cutting edge laptop for programmers who take it seriously.', 5000, 'USD', 2, 2);
+INSERT INTO public.products (id, name, description, price, currency, product_category_id, supplier_id, image) VALUES (3, 'UltraBook 9001', 'Cutting edge laptop for programmers who take it seriously.', 5000, 'USD', 2, 2, 'gmo');
+INSERT INTO public.products (id, name, description, price, currency, product_category_id, supplier_id, image) VALUES (2, 'Milka Dark', 'Dark chocolate from the Alps.', 1, 'USD', 3, 3, 'def');
+INSERT INTO public.products (id, name, description, price, currency, product_category_id, supplier_id, image) VALUES (1, 'Samsung Galaxy S8', 'A phone.', 500, 'USD', 1, 1, 'abc');
 
 
 --
@@ -397,55 +433,56 @@ INSERT INTO public.suppliers (id, name, description) VALUES (3, 'Milka', 'Tasty 
 
 INSERT INTO public.users (email, phone, name, password, id) VALUES ('admin@admin.org', '123456789', 'John Doe', 'admin', 1);
 INSERT INTO public.users (email, phone, name, password, id) VALUES ('test@test.com', '987654321', 'Jane Smith', 'password', 3);
+INSERT INTO public.users (email, phone, name, password, id) VALUES ('jano@janika.com', '5678901234', 'Janika', 'nincs', 30);
 
 
 --
 -- Name: addresses_id_seq; Type: SEQUENCE SET; Schema: public; Owner: danielcs88
 --
 
-SELECT pg_catalog.setval('public.addresses_id_seq', 5, true);
+SELECT pg_catalog.setval('public.addresses_id_seq', 53, true);
 
 
 --
 -- Name: orders_id_seq; Type: SEQUENCE SET; Schema: public; Owner: danielcs88
 --
 
-SELECT pg_catalog.setval('public.orders_id_seq', 7, true);
+SELECT pg_catalog.setval('public.orders_id_seq', 53, true);
 
 
 --
 -- Name: product_orders_id_seq; Type: SEQUENCE SET; Schema: public; Owner: danielcs88
 --
 
-SELECT pg_catalog.setval('public.product_orders_id_seq', 13, true);
+SELECT pg_catalog.setval('public.product_orders_id_seq', 64, true);
 
 
 --
 -- Name: productcategory_id_seq; Type: SEQUENCE SET; Schema: public; Owner: danielcs88
 --
 
-SELECT pg_catalog.setval('public.productcategory_id_seq', 3, true);
+SELECT pg_catalog.setval('public.productcategory_id_seq', 56, true);
 
 
 --
 -- Name: products_id_seq; Type: SEQUENCE SET; Schema: public; Owner: danielcs88
 --
 
-SELECT pg_catalog.setval('public.products_id_seq', 3, true);
+SELECT pg_catalog.setval('public.products_id_seq', 30, true);
 
 
 --
 -- Name: suppliers_id_seq; Type: SEQUENCE SET; Schema: public; Owner: danielcs88
 --
 
-SELECT pg_catalog.setval('public.suppliers_id_seq', 3, true);
+SELECT pg_catalog.setval('public.suppliers_id_seq', 33, true);
 
 
 --
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: danielcs88
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 3, true);
+SELECT pg_catalog.setval('public.users_id_seq', 54, true);
 
 
 --

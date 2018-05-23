@@ -8,8 +8,8 @@ public interface OrderDao {
 
     Order findActive(int userId);
     Order findById(int id);
-    int add(Order order);
-    void update(Order order);
+    int createOrder(int userId);
+    void finalizeOrder(int id, String paymentId);
     void remove(int id);
     List<Order> getAllCompleted(int userId);
 

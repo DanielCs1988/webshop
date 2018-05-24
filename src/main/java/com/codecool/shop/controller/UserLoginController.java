@@ -28,10 +28,10 @@ public class UserLoginController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        String userName = req.getParameter("username");
+        String email = req.getParameter("email");
         String password = req.getParameter("password");
         PrintWriter out = resp.getWriter();
-        User user = userDataStore.find(userName);
+        User user = userDataStore.find(email);
 
         if (user == null) {
             out.print(gson.toJson(null));

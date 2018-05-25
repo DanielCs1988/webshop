@@ -1,8 +1,10 @@
 package com.codecool.shop.controller;
 
 import com.codecool.shop.dao.ProductDao;
-import com.codecool.shop.dao.implementation.ProductDaoMem;
+import com.codecool.shop.dao.implementation.ProductDaoPSQL;
 import com.codecool.shop.model.Product;
+import com.codecool.shop.utils.AuthGuard;
+import com.codecool.shop.utils.RequestJSONProcessor;
 import com.google.gson.Gson;
 
 import javax.servlet.ServletException;
@@ -15,7 +17,8 @@ import java.io.PrintWriter;
 public class ProductController extends HttpServlet {
 
     private Gson gson = new Gson();
-    private ProductDao productDataStore = ProductDaoMem.getInstance();
+    private AuthGuard authGuard = new AuthGuard();
+    private ProductDao productDataStore = new ProductDaoPSQL();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -29,8 +32,8 @@ public class ProductController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (isUnauthorized(req, resp)) return;
-        String input = req.getParameter("product");
+        if (authGuard.processToken(req, resp) == -1) return;
+        String input = RequestJSONProcessor.requestJsonProcessor(req);
         Product newProduct = gson.fromJson(input, Product.class);
         productDataStore.add(newProduct);
         System.out.println(newProduct);
@@ -38,19 +41,9 @@ public class ProductController extends HttpServlet {
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // TODO: handle getting wrong id input
         String productId = req.getParameter("product-id");
-        if (isUnauthorized(req, resp) || productId == null) return;
+        if (authGuard.processToken(req, resp) == -1 || productId == null) return;
         productDataStore.remove(Integer.valueOf(productId));
         System.out.println("Product number " + productId + " was removed from the store.");
-    }
-
-    private boolean isUnauthorized(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String password = req.getParameter("password");
-        if (password == null || !password.equals(System.getenv("ADMIN_PASSWORD"))) {
-            resp.sendError(401);
-            return true;
-        }
-        return false;
     }
 }

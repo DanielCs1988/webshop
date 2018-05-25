@@ -1,72 +1,66 @@
 package com.codecool.shop.model;
 
+import java.util.Objects;
+
 public class User {
 
+    private int id;
     private String name;
+    private String password;
     private String email;
     private String phone;
-    private Address billingAddress;
-    private Address shippingAddress;
 
-    public User(String name, String email, String phone, Address billingAddress, Address shippingAddress) {
+    public User(int id, String name, String password, String email, String phone) {
+        this.id = id;
         this.name = name;
+        this.password = password;
         this.email = email;
         this.phone = phone;
-        this.billingAddress = billingAddress;
-        this.shippingAddress = shippingAddress;
     }
 
-    public User() {
+    public User(String name, String password, String email, String phone) {
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.phone = phone;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getPassword() {
+        return password;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getPhone() {
         return phone;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public Address getBillingAddress() {
-        return billingAddress;
-    }
-
-    public void setBillingAddress(Address billingAddress) {
-        this.billingAddress = billingAddress;
-    }
-
-    public Address getShippingAddress() {
-        return shippingAddress;
-    }
-
-    public void setShippingAddress(Address shippingAddress) {
-        this.shippingAddress = shippingAddress;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
-                ", billingAddress='" + billingAddress + '\'' +
-                ", shippingAddress='" + shippingAddress + '\'' +
                 '}';
     }
 }

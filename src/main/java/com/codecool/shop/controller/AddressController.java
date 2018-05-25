@@ -38,6 +38,7 @@ public class AddressController extends HttpServlet {
         PrintWriter out = resp.getWriter();
         String addressJson = RequestJSONProcessor.requestJsonProcessor(req);
         Address address = gson.fromJson(addressJson, Address.class);
+        address.setUserId(userId);
         out.println(addressDataStore.add(address));
     }
 

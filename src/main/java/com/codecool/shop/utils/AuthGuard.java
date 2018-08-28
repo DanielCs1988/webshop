@@ -18,7 +18,7 @@ import java.util.Date;
 public class AuthGuard {
 
     private static final String ISSUER = "Codeberg";
-    private static final long EXPIRATION_TIME = 900000;  // That's 15 minutes in milliseconds.
+    private static final long EXPIRATION_TIME = 90000000;  // That's 1500 minutes in milliseconds.
 
     public String createToken(User user) {
         try {

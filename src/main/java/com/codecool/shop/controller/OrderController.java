@@ -53,7 +53,6 @@ public class OrderController extends HttpServlet {
 
         orderDaoDataStore.finalizeOrder(orderId, paymentId);
         Order fullOrder = orderDaoDataStore.findById(orderId);
-        OrderUtils.logOrder(fullOrder);
         OrderUtils.sendMail(fullOrder);
     }
 }

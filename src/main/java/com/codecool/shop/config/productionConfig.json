@@ -1,5 +1,5 @@
 {
-  "path": "jdbc:postgresql://localhost:5432/codecoolshop",
-  "username": "postgres",
-  "password": "postgres"
+  "path": "jdbc:postgresql://ec2-54-217-245-9.eu-west-1.compute.amazonaws.com:5432/d1ehh64sioa27u",
+  "username": "wnssoqxoilzeyp",
+  "password": "de0c69ef5f336bc5d3aedbbc8dd48dd9638bb9be40d9f98ecb420f1b39c3c3ae"
 }

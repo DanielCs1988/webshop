@@ -17,6 +17,7 @@ public class CorsHandler implements Filter {
         response.addHeader("Access-Control-Allow-Origin", "*");
         response.addHeader("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
         response.addHeader("Access-Control-Allow-Headers", "Content-type,Accept,Authorization");
+        System.out.println("Inside middleware");
 
         if (request.getMethod().equals("OPTIONS")) {
             PrintWriter out = response.getWriter();

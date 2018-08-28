@@ -21,6 +21,8 @@ public class CorsHandler implements Filter {
         if (request.getMethod().equals("OPTIONS")) {
             PrintWriter out = response.getWriter();
             out.println("");
+            System.out.println("OPTIONS RECEIVED");
+            return;
         }
 
         filterChain.doFilter(request, response);

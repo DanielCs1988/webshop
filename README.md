@@ -5,7 +5,11 @@ The task was to create an online webshop within the timeframe of 1 week-long spr
 guidelines (and thus the user stories) focused on the backend implementation, however we had decided to learn
 a popular frontend framework in our spare time instead of using the provided Thymeleaf template engine.
 
-[Here](https://github.com/CodecoolBP20173/codeberg-webshop-ng) is the repository link for the final, Angular implementation of that part. 
+[Here](https://github.com/CodecoolBP20173/codeberg-webshop-ng) is the repository link for the final, Angular implementation of that part.
+
+You can check out the deployed webshop [here](https://codeberg-webshop.firebaseapp.com).
+The backend will take a couple of seconds to load for the first time, as it is put to sleep automatically by Heroku,
+where it is deployed. The frontend is hosted on Google Firebase.
 
 # Backend: Java SE8 with PostgreSQL database
 
